@@ -2,14 +2,14 @@
   "development": {
     "username": "greg",
     "password": "greg12345",
-    "database": "rehobot_dev",
+    "database": "rhb_dev",
     "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
     "password": "root",
-    "database": "rehobot",
+    "database": "rhb_stag",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
