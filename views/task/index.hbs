@@ -1,0 +1,105 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>List of My Tasks</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <div>
+                        <label for="role" class="form-label mr-2">Section</label>
+                        <select class="form-select" aria-label="Default select" id="section">
+                            <option value="Creative">Creative</option>
+                            <option value="Design">Design</option>
+                        </select>
+                    </div>
+                    <table id="table_general1" class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Time Start</th>
+                                <th style="width: 20%">Time End</th>
+                                <th style="width: 10%">Event</th>
+                                <th style="width: 10%">Location</th>
+                                <th style="width: 10%">Room</th>
+                                <th style="width: 10%">Status</th>
+                                <th style="width: 20%">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<script>
+    let section = $('#section').val()
+
+
+    $(document).ready(function () {
+        $("#section").change(function () {
+            section = $(this).children("option:selected").val();
+            $('#table_general1').DataTable().clear().destroy()
+            tableSearch()
+        });
+
+        function tableSearch() {
+            table = $('#table_general1').DataTable({
+                "order": [[0, "desc"]],
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": `/cms/needs/task/${section}`,
+                    "type": "GET"
+                },
+                "columns": [
+                    { "name": 'time_start', "data": "time_start" },
+                    { "name": 'time_end', "data": "time_end" },
+                    { "name": 'event_name', "data": "event_name" },
+                    { sortable: false, "data": "location" },
+                    { sortable: false, "data": "room" },
+                    { sortable: false, "data": "status" },
+                    {
+                        "sortable": false,
+                        "targets": -1,
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return `
+                                    <a class="btn btn-info btn-sm" href="/cms/needs/detail/${data['need_id']}">
+                                        <i class="far fa-file-alt pr-1"></i>
+                                        Detail
+                                    </a>
+                                    <a class="btn btn-primary btn-sm" href="/cms/needs/task/upload/${data['section']}/${data["id"]}">
+                                        <i class="fas fa-upload pr-1"></i>
+                                        Upload Link
+                                    </a>
+                                `
+                        }
+                    }
+                ]
+            })
+        }
+
+        tableSearch()
+    });
+</script>

@@ -1,0 +1,38 @@
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <legend>{{session.permission.commission_name}} Calendar</legend>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            {{#if messages.msg_info}}
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Success!</h5>
+                {{messages.msg_info}}
+            </div>
+            {{/if}}
+            {{#if messages.msg_error}}
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                {{messages.msg_error}}
+            </div>
+            {{/if}}
+            {{#ifDepartment session.permission.commission_name 'Ruangan MAG'}}
+            {{!-- Ruangan MAG --}}
+            <iframe
+                src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23ffffff&amp;ctz=Asia%2FJakarta&amp;src=c3JydHRhM3BvMmZidjBvZWNlb3JmdWJtZWdAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&amp;color=%23F4511E&amp;showNav=1&amp;showPrint=0&amp;showCalendars=0&amp;showTitle=0&amp;showTz=0"
+                style="border:solid 1px #777" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+            {{else}}
+            {{!-- Ruangan Kirana --}}
+            <iframe
+                src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23ffffff&amp;ctz=Asia%2FJakarta&amp;src=anFxZzA3N3FpcmswMGMxanRocTk2ZWdkaGdAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&amp;color=%238E24AA&amp;showPrint=0&amp;showTitle=0&amp;showCalendars=0&amp;showTz=0"
+                style="border:solid 1px #777" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+            {{/ifDepartment}}
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</div>
+<!-- /.container-fluid -->

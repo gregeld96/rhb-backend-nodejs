@@ -1,0 +1,71 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>{{ legend }}</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <form action="/cms/dynamic-pages/home/edit/{{data.id}}" method="post" class="mb-3">
+                        <div class="form-group">
+                            <label for="home-area">Area</label>
+                            <input type="text" class="form-control w-50" id="home-area" name="area" value="{{data.area}}"
+                                placeholder="KG1" required>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="home-day">Day</label>
+                            <input type="text" class="form-control w-50" id="home-day" name="day" value="{{data.day}}"
+                                placeholder="Senin" required>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="home-time">time</label>
+                            <input type="text" class="form-control w-50" id="home-time" name="time" value="{{data.time}}"
+                                placeholder="17:00" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="section" class="form-label">Section</label> <br />
+                            <select class="form-select" aria-label="Default select" name="section" id="section">
+                                {{#selectValueTrue data.section}}
+                                <option value='offline'>Offline</option>
+                                <option value='online'>Online</option>
+                                {{/selectValueTrue}}
+                            </select>
+                        </div>
+                        <div>
+                            <button id="create-btn" type="submit" class="my-auto btn btn-primary mr-3 mb-3"><i
+                                    class="fas fa-check mr-1"></i>Update</button>
+                            <a class="btn btn-success" href="/cms/dynamic-pages/home/">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<script>
+
+</script>

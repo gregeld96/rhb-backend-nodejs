@@ -1,0 +1,377 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex">
+                    <legend>{{ legend }}</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <div class="card w-50">
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><b>Event:</b> {{request.event_name}}</li>
+                                <li class="list-group-item"><b>Time Start:</b> {{ request.time_start}}</li>
+                                <li class="list-group-item"><b>Time End:</b> {{request.time_end}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <form>
+                        {{#checkComissionRuanganOnly session.permission.commission_name session.permission.role_name
+                        view_mode }}
+                        <div class="mb-4">
+                            <div class="mb-1">
+                                <label class="form-check-label">
+                                    Ruangan
+                                </label>
+                            </div>
+                            <div>
+                                <div class="form-check mb-2">
+                                    <label class="mb-1">Lokasi</label>
+                                    <div>
+                                        <input type="radio" name="ruangan" class="location" value='MAG' {{checkValueTrue
+                                            request.ruangan.location 'MAG' }} {{disabled}}>
+                                        <label class="form-check-label" for="mag">Mall Artha Gading</label><br>
+                                        <input type="radio" name="ruangan" class="location" value='Kirana'
+                                            {{checkValueTrue request.ruangan.location 'Kirana' }} {{disabled}}>
+                                        <label class="form-check-label" for="kirana">Graha Kirana</label><br>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div>
+                                        <input type="hidden" name="ruangan" id="consumption" class="form-check-input">
+                                        <label class="form-check-label"><b>Konsumsi</b></label>
+                                    </div>
+                                    {{#if request.ruangan.consumption}}
+                                    <div class="mb-2">
+                                        <input type="checkbox" name="consumption" value='Snack' {{checkArrayValue
+                                            request.ruangan.consumption 'Snack' }}>
+                                        <label class="form-check-label mr-2">Snack</label>
+                                        <input type="checkbox" name="consumption" value='Prasmanan' {{checkArrayValue
+                                            request.ruangan.consumption 'Prasmanan' }}>
+                                        <label class="form-check-label mr-2">Prasmanan</label>
+                                        <input type="checkbox" name="consumption" value='Nasi Kotak' {{checkArrayValue
+                                            request.ruangan.consumption 'Nasi Kotak' }}>
+                                        <label class="form-check-label mr-2">Nasi Kotak</label>
+                                        <input type="checkbox" name="consumption" value='Teh' {{checkArrayValue
+                                            request.ruangan.consumption 'Teh' }}>
+                                        <label class="form-check-label mr-2">Teh</label>
+                                        <input type="checkbox" name="consumption" value='Kopi' {{checkArrayValue
+                                            request.ruangan.consumption 'Kopi' }}>
+                                        <label class="form-check-label mr-2">Kopi</label>
+                                        <input type="checkbox" name="consumption" value='Air Mineral' {{checkArrayValue
+                                            request.ruangan.consumption 'Air Mineral' }}>
+                                        <label class="form-check-label mr-2">Air Mineral</label>
+                                    </div>
+                                    {{else}}
+                                    <div class="mb-2">
+                                        <input type="checkbox" name="consumption" value='Snack'>
+                                        <label class="form-check-label mr-2">Snack</label>
+                                        <input type="checkbox" name="consumption" value='Prasmanan'>
+                                        <label class="form-check-label mr-2">Prasmanan</label>
+                                        <input type="checkbox" name="consumption" value='Nasi Kotak'>
+                                        <label class="form-check-label mr-2">Nasi Kotak</label>
+                                        <input type="checkbox" name="consumption" value='Teh'>
+                                        <label class="form-check-label mr-2">Teh</label>
+                                        <input type="checkbox" name="consumption" value='Kopi'>
+                                        <label class="form-check-label mr-2">Kopi</label>
+                                        <input type="checkbox" name="consumption" value='Air Mineral'>
+                                        <label class="form-check-label mr-2">Air Mineral</label>
+                                    </div>
+                                    {{/if}}
+                                </div>
+                                <div class="form-check">
+                                    <div>
+                                        <input type="hidden" id="unitTable" class="form-check-input">
+                                        <label class="form-check-label"><b>Unit Table</b></label>
+                                    </div>
+                                    {{#if request.ruangan.unitTable}}
+                                    <div class="mb-2">
+                                        <input type="checkbox" name="table" value='Single' {{checkArrayValue
+                                            request.ruangan.unitTable 'Single' }}>
+                                        <label class="form-check-label mr-2">Single</label>
+                                        <input type="checkbox" name="table" value='Letter U' {{checkArrayValue
+                                            request.ruangan.unitTable 'Letter U' }}>
+                                        <label class="form-check-label mr-2">Letter U</label>
+                                    </div>
+                                    {{else}}
+                                    <div class="mb-2">
+                                        <input type="checkbox" name="table" value='Single'>
+                                        <label class="form-check-label mr-2">Single</label>
+                                        <input type="checkbox" name="table" value='Letter U'>
+                                        <label class="form-check-label mr-2">Letter U</label>
+                                    </div>
+                                    {{/if}}
+                                </div>
+                                <div class="form-check">
+                                    <div>
+                                        <label class="form-check-label"><b>Nama Ruangan</b></label>
+                                    </div>
+                                    <div class="mb-2">
+                                        {{#checkAdminDepartmentAndPermitedDepartment
+                                        session.permission.commission_name 'Ruangan MAG'
+                                        session.permission.role_name}}
+                                        <select class="form-control w-25" name="roomName">
+                                            {{#selectValueTrue request.ruangan.roomName}}
+                                            <option value="Function Hall lt.5">Function Hall lt.5</option>
+                                            <option value="CDC Hall">CDC Hall</option>
+                                            <option value="301">301</option>
+                                            <option value="314">314</option>
+                                            {{/selectValueTrue}}
+                                        </select>
+                                        {{else}}
+                                        <select class="form-control w-25" name="roomName">
+                                            <option value="Ruang Meeting lt.1">Ruang Meeting lt.1</option>
+                                            <option value="Ruang Meeting lt.2">Ruang Meeting lt.2</option>
+                                            <option value="Studio Tv lt.3">Studio Tv lt.3</option>
+                                            <option value="Function Hall Kirana">Function Hall Kirana</option>
+                                        </select>
+
+                                        {{/checkAdminDepartmentAndPermitedDepartment}}
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>Jumlah Pax</label><br />
+                                            {{#if request.ruangan.totalPax}}
+                                            <input type="text" id="pax" value="{{request.ruangan.totalPax}}">
+                                            {{else}}
+                                            <input type="text" id="pax">
+                                            {{/if}}
+                                        </div>
+                                        <div class="col">
+                                            <label>Ac dinyalakan</label><br />
+                                            {{#if request.ruangan.airconStart}}
+                                            <input type="datetime-local" id="aircon"
+                                                value="{{request.ruangan.airconStart}}">
+                                            {{else}}
+                                            <input type="datetime-local" id="aircon">
+                                            {{/if}}
+                                        </div>
+                                        <div class="col">
+                                            <label>Buka Ruangan Pukul</label><br />
+                                            {{#if request.ruangan.openHour}}
+                                            <input type="datetime-local" id="openHour"
+                                                value="{{request.ruangan.openHour}}">
+                                            {{else}}
+                                            <input type="datetime-local" id="openHour">
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{else}}
+                        {{#ifDepartment session.permission.commission_name 'Design & Creative'}}
+                        {{#if request.designFlyer.required}}
+                        <div class="mb-4">
+                            <div class="mb-1">
+                                <label class="form-check-label">
+                                    Design Flyer
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label><b>Keterangan</b></label><br />
+                                <textarea type="text" id="design" name="designFlyer" rows="2"
+                                    class="form-control">{{request.designFlyer.keterangan}}</textarea>
+                            </div>
+                        </div>
+                        {{/if}}
+                        {{#if request.creativeVideo.required}}
+                        <div class="mb-4">
+                            <div class="mb-1">
+                                <label class="form-check-label">
+                                    Creative Video
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                {{#if request.creativeVideo.shooting}}
+                                <input type="checkbox" name="creativeVideo" id="shooting" checked>
+                                {{else}}
+                                <input type="checkbox" name="creativeVideo" id="shooting">
+                                {{/if}}
+                                <label class="form-check-label">Shooting</label><br />
+                                {{#if request.creativeVideo.editing}}
+                                <input type="checkbox" name="creativeVideo" id="editing" checked>
+                                {{else}}
+                                <input type="checkbox" name="creativeVideo" id="editing">
+                                {{/if}}
+                                <label class="form-check-label">Editing</label><br />
+                                <label><b>Keterangan</b></label><br />
+                                <textarea type="text" id="creative" name="creativeVideo" rows="2"
+                                    class="form-control">{{request.creativeVideo.keterangan}}</textarea>
+                            </div>
+                        </div>
+                        {{/if}}
+                        {{else}}
+                        {{#ifDepartment session.permission.commission_name 'IT'}}
+                        <div class="mb-4">
+                            <div class="mb-1">
+                                <label class="form-check-label">
+                                    IT
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                {{#if request.it.onlineForm}}
+                                <input type="checkbox" name="it" id="onlineForm" checked>
+                                {{else}}
+                                <input type="checkbox" name="it" id="onlineForm">
+                                {{/if}}
+                                <label class="form-check-label">Online Form</label><br />
+                                {{#if request.it.whatsAppBlast}}
+                                <input type="checkbox" name="it" id="whatsapp" checked>
+                                {{else}}
+                                <input type="checkbox" name="it" id="whatsapp">
+                                {{/if}}
+                                <label class="form-check-label">WhatsApp Blast</label><br />
+                                {{#if request.it.smsBlast}}
+                                <input type="checkbox" name="it" id="sms" checked>
+                                {{else}}
+                                <input type="checkbox" name="it" id="sms">
+                                {{/if}}
+                                <label class="form-check-label">SMS Blasting</label><br />
+                                <label><b>Keterangan</b></label><br />
+                                <textarea type="text" id="it_field" name="it" rows="2" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        {{/ifDepartment}}
+                        {{/ifDepartment}}
+                        {{/checkComissionRuanganOnly}}
+                    </form>
+                    {{#checkComissionRuanganOnly session.permission.commission_name session.permission.role_name
+                    view_mode }}
+                    <button class="btn btn-primary mb-3" id="ruangan-confirm-btn">Confirm</button>
+                    {{else}}
+                    <button class="btn btn-primary mb-3" id="confirm-btn">Confirm Need</button>
+                    {{/checkComissionRuanganOnly }}
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<script>
+    let table = `{{{request.ruangan.unitTable}}}`;
+    let consumption = `{{{request.ruangan.consumption}}}`;
+    let role = [];
+
+    $(document).ready(function () {
+        $("input").click(function () {
+            table = [];
+            consumption = [];
+            role = [];
+
+            $.each($("input[name='table']:checked"), function () {
+                table.push($(this).val());
+            });
+
+            $.each($("input[name='consumption']:checked"), function () {
+                consumption.push($(this).val());
+            });
+        })
+
+        $("#ruangan-confirm-btn").click(function () {
+            ruanganSubmit()
+        })
+
+        $("#confirm-btn").click(function () {
+            submit()
+        })
+    })
+
+    function ruanganSubmit() {
+        let request = {};
+        request.required = true
+        request.location = $("input[class='location']:checked").val()
+        request.consumption = String(consumption)
+        request.unitTable = String(table)
+        request.roomName = $("select[name='roomName']").val()
+        request.totalPax = $("#pax").val()
+        request.airconStart = $("#aircon").val()
+        request.openHour = $("#openHour").val()
+        request.approved = true
+
+        $.ajax({
+            url: `/cms/ruangan/edit/{{{needId}}}`,
+            method: 'POST',
+            data: request
+        })
+            .then((data) => {
+                window.location.href = `${data.redirectUrl}`
+            })
+    }
+
+    function submit() {
+        let request = [];
+
+        if ('{{{session.permission.commission_name}}}' == 'Design & Creative') {
+            if ('{{{request.creativeVideo.required}}}' == 'true') {
+                let detail = {
+                    creativeVideo: [
+                        { shooting: $("#shooting").is(':checked') ? true : '' },
+                        { editing: $("#editing").is(':checked') ? true : '' },
+                        { keterangan: $("#creative").val() }
+                    ]
+                }
+                request.push(detail)
+            }
+
+            if ('{{{request.designFlyer.required}}}' == 'true') {
+                let detail = {
+                    designFlyer: [
+                        { keterangan: $("#design").val() }
+                    ]
+                }
+                request.push(detail)
+            }
+        }
+
+        if ('{{{session.permission.commission_name}}}' == 'IT') {
+            if ('{{{request.it.required}}}' == 'true') {
+                let detail = {
+                    it: [
+                        { whatsAppBlast: $("#whatsapp").is(':checked') ? true : '' },
+                        { onlineForm: $("#onlineForm").is(':checked') ? true : '' },
+                        { smsBlast: $("#sms").is(':checked') ? true : '' },
+                        { keterangan: $("#it_field").val() }
+                    ]
+                }
+                request.push(detail)
+            }
+        }
+
+        console.log(request)
+
+        $.ajax({
+            url: `/cms/needs/edit/{{{needId}}}`,
+            method: 'POST',
+            data: {
+                request
+            }
+        })
+            .then((data) => {
+                window.location.href = `${data.redirectUrl}`
+            })
+    }
+
+</script>

@@ -1,0 +1,511 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex">
+                    <legend>Assign Event Need</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <div class="card w-50">
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><b>Event:</b> {{request.event_name}}</li>
+                                <li class="list-group-item"><b>Time Start:</b> {{ request.time_start}}</li>
+                                <li class="list-group-item"><b>Time End:</b> {{request.time_end}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <form id="create-form">
+                        <div class="mb-4">
+                            <div class="form-check mb-1">
+                                <input class="form-check-input" type="checkbox" name="ruangan" value='true' id="ruangan"
+                                    required>
+                                <label class="form-check-label" for="ruangan">
+                                    Ruangan
+                                </label>
+                            </div>
+                            <div>
+                                <div class="form-check mb-2">
+                                    <label class="mb-1">Lokasi</label>
+                                    <div>
+                                        <input type="radio" name="location" class="location" value='MAG' disabled
+                                            required>
+                                        <label class="form-check-label" for="mag">Mall Artha Gading</label><br>
+                                        <input type="radio" name="location" class="location" value='Kirana' disabled
+                                            required>
+                                        <label class="form-check-label" for="kirana">Graha Kirana</label><br>
+                                    </div>
+                                </div>
+                                <table class="ml-3 table table-bordered table-striped text-center w-50">
+                                    <thead>
+                                        <th>Mall Artha Gading</th>
+                                        <th>Graha Kirana</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Function Hall Lt.5 (3000 org)</td>
+                                            <td>Ruang Meeting Lt.1 (15 org)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>CDC Hall (200 org)</td>
+                                            <td>Ruang Meeting Lt.2 (15 org)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>301 (25 org)</td>
+                                            <td>Studio TV Lt.3 (10 org)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>314 (20 org)</td>
+                                            <td>Function Hall Kirana (50 org)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="form-check">
+                                    <div>
+                                        <input type="hidden" name="ruangan" id="consumption" class="form-check-input">
+                                        <label class="form-check-label"><b>Konsumsi</b></label>
+                                    </div>
+                                    <div class="mb-2">
+                                        <input type="checkbox" name="consumption" value='Snack'>
+                                        <label class="form-check-label mr-2">Snack</label>
+                                        <input type="checkbox" name="consumption" value='Prasmanan'>
+                                        <label class="form-check-label mr-2">Prasmanan</label>
+                                        <input type="checkbox" name="consumption" value='Nasi Kotak'>
+                                        <label class="form-check-label mr-2">Nasi Kotak</label>
+                                        <input type="checkbox" name="consumption" value='Teh'>
+                                        <label class="form-check-label mr-2">Teh</label>
+                                        <input type="checkbox" name="consumption" value='Kopi'>
+                                        <label class="form-check-label mr-2">Kopi</label>
+                                        <input type="checkbox" name="consumption" value='Air Mineral'>
+                                        <label class="form-check-label mr-2">Air Mineral</label>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div>
+                                        <input type="hidden" name="ruangan" id="unitTable" class="form-check-input">
+                                        <label class="form-check-label"><b>Unit Table</b></label>
+                                    </div>
+                                    <div class="mb-2">
+                                        <input type="checkbox" name="table" value='Single'>
+                                        <label class="form-check-label mr-2">Single</label>
+                                        <input type="checkbox" name="table" value='Letter U'>
+                                        <label class="form-check-label mr-2">Letter U</label>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>Jumlah Pax</label><br />
+                                            <input type="text" id="pax" name="ruangan">
+                                        </div>
+                                        <div class="col">
+                                            <label>Ac dinyalakan</label><br />
+                                            <input type="datetime-local" id="aircon" required>
+                                        </div>
+                                        <div class="col">
+                                            <label>Buka Ruangan Pukul</label><br />
+                                            <input type="datetime-local" id="openHour" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="musicMultimedia" value='true'
+                                    id="musicMultimedia">
+                                <label class="form-check-label">
+                                    Pemusik dan Multimedia
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <div>
+                                    <input type="text" name="musicMultimedia" id="role" hidden>
+                                    <label><b>Team</b></label><br />
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="role" value='Workship Leader'>
+                                    <label class="form-check-label mr-2">Workship Leader</label>
+                                    <input type="checkbox" name="role" value='Singer'>
+                                    <label class="form-check-label mr-2">Singer</label>
+                                    <input type="checkbox" name="role" value='Keyboardist'>
+                                    <label class="form-check-label mr-2">Keyboardist</label>
+                                    <input type="checkbox" name="role" value='Guitarist'>
+                                    <label class="form-check-label mr-2">Guitarist</label>
+                                    <input type="checkbox" name="role" value='Drummer'>
+                                    <label class="form-check-label mr-2">Drummer</label>
+                                    <input type="checkbox" name="role" value='Bassist'>
+                                    <label class="form-check-label mr-2">Bassist</label>
+                                    <input type="checkbox" name="role" value='Perkusi'>
+                                    <label class="form-check-label mr-2">Perkusi</label> <br />
+                                    <input type="checkbox" name="role" value='Orchestra'>
+                                    <label class="form-check-label mr-2">Orchestra</label>
+                                    <input type="checkbox" name="role" value='Soundman'>
+                                    <label class="form-check-label mr-2">Soundman</label>
+                                    <input type="checkbox" name="role" value='Lighting'>
+                                    <label class="form-check-label mr-2">Lighting</label>
+                                    <input type="checkbox" name="role" value='Streaming'>
+                                    <label class="form-check-label">Streaming</label>
+                                    <input type="checkbox" name="role" value='Multimedia'>
+                                    <label class="form-check-label mr-2">Multimedia</label>
+                                    <input type="checkbox" name="role" value='Kameramen'>
+                                    <label class="form-check-label mr-2">Kameramen</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="designFlyer" value='true'
+                                    id="designFlyer">
+                                <label class="form-check-label">
+                                    Design Flyer
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label><b>Keterangan</b></label><br />
+                                <textarea type="text" id="design" name="designFlyer" rows="2"
+                                    class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="creativeVideo" value='true'
+                                    id="creativeVideo">
+                                <label class="form-check-label">
+                                    Creative Video
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" name="creativeVideo" id="shooting">
+                                <label class="form-check-label">Shooting</label><br />
+                                <input type="checkbox" name="creativeVideo" id="editing">
+                                <label class="form-check-label">Editing</label><br />
+                                <label><b>Keterangan</b></label><br />
+                                <textarea type="text" id="creative" name="creativeVideo" rows="2"
+                                    class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="it" id="it" value='true'>
+                                <label class="form-check-label">
+                                    IT
+                                </label>
+                            </div>
+                            <div class="form-check" id="subs" hidden>
+                                <input type="checkbox" name="it" id="onlineForm">
+                                <label class="form-check-label">Online Form</label><br />
+                                <input type="checkbox" name="it" id="whatsapp">
+                                <label class="form-check-label">WhatsApp Blast</label><br />
+                                <input type="checkbox" name="it" id="sms">
+                                <label class="form-check-label">SMS Blasting</label><br />
+                                <label><b>Keterangan</b></label><br />
+                                <textarea type="text" id="it_field" name="it" rows="2" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="security" value='true'
+                                    id="security">
+                                <label class="form-check-label">
+                                    Security
+                                </label>
+                                <input type="text" id="security-location" name="security" hidden>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="socialMedia" id="socialMedia"
+                                    value='true'>
+                                <label class="form-check-label">
+                                    Social Media
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="d-flex my-auto">
+                        <button type="button" class="btn btn-primary mb-3" id="assign-btn" disabled><i
+                                class="fas fa-check pr-1"></i>Confirm
+                            Add</button>
+                        <p class="text-muted mt-2 ml-2" id="noted">Please fill up jumlah pax, ac dinyalakan, buka
+                            ruangan, pilih lokasi dan check ruangan</p>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<!-- Modal Add Need -->
+<div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Confirm Assign</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <strong>Anda yakin semua sudah benar ?</strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button class="btn btn-success" id="confirm-btn">Sure</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let table = [];
+    let consumption = [];
+    let role = [];
+    let place;
+
+    $(document).ready(function () {
+        $("input").on('change', function () {
+
+            if ($("#ruangan").is(":checked")) {
+                $(".location").removeAttr("disabled")
+            } else {
+                $(".location").prop("disabled", true)
+            }
+
+            table = [];
+            $.each($("input[name='table']:checked"), function () {
+                table.push($(this).val());
+            });
+
+            consumption = [];
+            $.each($("input[name='consumption']:checked"), function () {
+                consumption.push($(this).val());
+            });
+
+            role = [];
+            $.each($("input[name='role']:checked"), function () {
+                role.push($(this).val());
+            });
+
+            $("input[name='table']").change(function () {
+                table = [];
+                $.each($("input[name='table']:checked"), function () {
+                    table.push($(this).val());
+                });
+                $('#ruangan').attr('checked', 'checked')
+                $("#security").attr('checked', 'checked')
+            });
+
+            $("input[name='consumption']").change(function () {
+                consumption = [];
+                $.each($("input[name='consumption']:checked"), function () {
+                    consumption.push($(this).val());
+                });
+                $('#ruangan').attr('checked', 'checked')
+                $("#security").attr('checked', 'checked')
+            });
+
+            $("input[name='role']").change(function () {
+                role = [];
+                $.each($("input[name='role']:checked"), function () {
+                    role.push($(this).val());
+                });
+                $('#musicMultimedia').attr('checked', 'checked')
+            });
+
+            $("input[class='location']").click(function () {
+                $('#ruangan').attr('checked', 'checked')
+                $("#security").attr('checked', 'checked')
+                place = $(this).val()
+            });
+
+            $("#it").click(function () {
+                if ($("#it").is(':checked')) {
+                    $("#subs").removeAttr("hidden")
+                } else {
+                    $("#subs").attr("hidden", "hidden")
+                }
+            });
+
+            $("#whatsapp").click(function () {
+                $('#it').attr('checked', 'checked')
+            });
+
+            $("#onlineForm").click(function () {
+                $('#it').attr('checked', 'checked')
+            });
+
+            $("#sms").click(function () {
+                $('#it').attr('checked', 'checked')
+            });
+
+            $("#shooting").click(function () {
+                $('#creativeVideo').attr('checked', 'checked')
+            });
+
+            $("#editing").click(function () {
+                $('#creativeVideo').attr('checked', 'checked')
+            });
+
+            if ($("#designFlyer").is(':checked')) {
+                $("#assign-btn").removeAttr("disabled")
+            }
+
+            if ($("#security").is(':checked')) {
+                $("#assign-btn").removeAttr("disabled")
+            }
+
+            if ($("#socialMedia").is(':checked')) {
+                $("#assign-btn").removeAttr("disabled")
+            }
+
+            if ($("#it").is(':checked')) {
+                if ($("#whatsapp").is(':checked') || $("#onlineForm").is(':checked') || $("#sms").is(':checked')) {
+                    $("#assign-btn").removeAttr("disabled")
+                } else {
+                    $("#assign-btn").prop('disabled', true)
+                    return
+                }
+            }
+
+            if ($("#creativeVideo").is(':checked')) {
+                if ($("#shooting").is(':checked') || $("#editing").is(':checked')) {
+                    $("#assign-btn").removeAttr("disabled")
+                } else {
+                    $("#assign-btn").prop('disabled', true)
+                    return
+                }
+            }
+
+            if ($("#musicMultimedia").is(':checked') && role.length > 0) {
+                $("#assign-btn").removeAttr("disabled")
+            } else if ($("#musicMultimedia").is(':checked') && role.length < 1) {
+                $("#assign-btn").prop('disabled', true)
+                return
+            }
+
+            if ($("#ruangan").is(":checked") && $(".location").is(":checked") && $("#pax").val() != "" && $("#aircon").val() != "" && $("#openHour").val() != "") {
+                $("#assign-btn").removeAttr("disabled")
+                $("#noted").hide()
+            } else {
+                $("#assign-btn").prop('disabled', true)
+                $("#noted").show()
+            }
+        })
+
+        $("#assign-btn").click(function () {
+            $("#ConfirmModal").modal("show")
+        })
+
+        $("#confirm-btn").click(function () {
+            submit()
+        })
+    });
+
+    function submit() {
+        let updated = [];
+
+        if ($("#ruangan").is(':checked')) {
+            updated.push({
+                ruangan: {
+                    required: $("#ruangan").val(),
+                    location: place,
+                    consumption: String(consumption),
+                    unitTable: String(table),
+                    totalPax: $("#pax").val(),
+                    airconStart: $("#aircon").val(),
+                    openHour: $("#openHour").val()
+                }
+            })
+        }
+
+        if ($("#musicMultimedia").is(':checked')) {
+            updated.push({
+                musicMultimedia: {
+                    required: $("#musicMultimedia").val(),
+                    team: String(role)
+                }
+            })
+        }
+
+        if ($("#designFlyer").is(':checked')) {
+            updated.push({
+                designFlyer: {
+                    required: $("#designFlyer").val(),
+                    keterangan: $("#design").val(),
+                }
+            })
+        }
+
+        if ($("#creativeVideo").is(':checked')) {
+            updated.push({
+                creativeVideo: {
+                    required: $("#creativeVideo").val(),
+                    shooting: $("#shooting").is(':checked') ? true : '',
+                    editing: $("#editing").is(':checked') ? true : '',
+                    keterangan: $("#creative").val(),
+                }
+            })
+        }
+
+        if ($("#it").is(':checked')) {
+            updated.push({
+                it: {
+                    required: $("#it").val(),
+                    whatsAppBlast: $("#whatsapp").is(':checked') ? true : '',
+                    onlineForm: $("#onlineForm").is(':checked') ? true : '',
+                    smsBlast: $("#sms").is(':checked') ? true : '',
+                    keterangan: $("#it_field").val(),
+                }
+            })
+        }
+
+        if ($("#security").is(':checked')) {
+            updated.push({
+                security: {
+                    required: $("#security").val(),
+                    location: place,
+                }
+            })
+        }
+
+        if ($("#socialMedia").is(':checked')) {
+            updated.push({
+                socialMedia: {
+                    required: $("#socialMedia").val()
+                }
+            })
+        }
+
+        $.ajax({
+            url: `/cms/needs/{{{eventId}}}/{{{needId}}}`,
+            method: 'POST',
+            data: {
+                updated
+            }
+        })
+            .then(data => {
+                window.location.href = `${data.redirectUrl}`
+            })
+    }
+
+</script>

@@ -1,0 +1,122 @@
+<div class="container-fluid">
+    <div style="text-align: right; padding-bottom: 20px;">
+        <a class="btn btn-success" href="/cms/{{section}}/participant?id={{event_id}}">
+            <i class="fas fa-arrow-circle-left"></i> Back
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>Detail Participant</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <div class="text-center">
+                        <div class="row mb-3">
+                            <div class="col">
+                                <h4>Full Name</h4>
+                                <p>{{user.full_name}}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <h5>Tempat Lahir</h5>
+                                <p>{{user.birth_place}}</p>
+                            </div>
+                            <div class="col">
+                                <h5>Tanggal Lahir</h5>
+                                <p>{{user.birth_of_date}}</p>
+                            </div>
+                            <div class="col">
+                                <h5>Gender</h5>
+                                <p>{{user.gender}}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-5">
+                            <div class="col">
+                                <h5>No. Telephone</h5>
+                                <p>{{user.phone_number}}</p>
+                            </div>
+                            <div class="col">
+                                <h5>Email</h5>
+                                <p>{{user.email}}</p>
+                            </div>
+                            <div class="col">
+                                <h5>Pekerjaan</h5>
+                                <p>{{user.occupation}}</p>
+                            </div>
+                        </div>
+                        <h4 class="mb-3">Alamat</h4>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <p>{{user.address.address}}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <h5>Provinsi</h5>
+                                <p>{{user.address.province}}</p>
+                            </div>
+                            <div class="col">
+                                <h5>Kota</h5>
+                                <p>{{user.address.city}}</p>
+                            </div>
+                            <div class="col">
+                                <h5>Kecamatan</h5>
+                                <p>{{user.address.district}}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-5">
+                            <div class="col">
+                                <h5>Kelurahan</h5>
+                                <p>{{user.address.subdistrict}}</p>
+                            </div>
+                            <div class="col">
+                                <h5>RT/RW</h5>
+                                <p>{{user.address.area}}</p>
+                            </div>
+                            <div class="col">
+                                <h5>Kode Pos</h5>
+                                <p>{{user.address.code_post}}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-5">
+                            <div class="col">
+                                <a class="btn btn-secondary btn-sm" target="_blank" href="/photos/private/user/akte-lahir/{{user.birth_certification_file}}">
+                                    <i class="fas fa-pencil-alt pr-1"></i>
+                                    Akte Lahir
+                                </a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<script>
+
+</script>

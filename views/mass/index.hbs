@@ -1,0 +1,99 @@
+<div class="container-fluid">
+    <div style="text-align: right; padding-bottom: 20px;">
+        {{#sectionMode section_mode}}
+        <a class="btn btn-success" href="/cms/penjadwalan/add-category">
+            <i class="fas fa-plus"></i> Add Category
+        </a>
+        <a class="btn btn-success" href="/cms/event/add-event">
+            <i class="fas fa-plus"></i> Add Event
+        </a>
+        {{else}}
+        <a class="btn btn-success" href="/cms/penjadwalan/add-section">
+            <i class="fas fa-plus"></i> Add Section
+        </a>
+        {{/sectionMode}}
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>{{ legend }}</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <table id="table_general1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Title</th>
+                                {{#sectionMode section_mode}}
+                                <th style="width: 20%">Section</th>
+                                <th style="width: 25%">Thumbnail</th>
+                                {{/sectionMode}}
+                                <th style="width: 35%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#filterResultSectionCategory list section_mode}}
+                            {{/filterResultSectionCategory}}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<!-- Modal Delete Produk-->
+<form id="add-row-form" action="/cms/penjadwalan/section/delete/" method="post">
+    <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <strong>Anda yakin mau menghapus data ini?</strong>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="mode" value="{{section_mode}}">
+                    <input type="hidden" name="mode_id" class="form-control mode_id" required>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        //tampilkan modal hapus record
+        $('#table_general1').on('click', '.delete', function () {
+            var mode_id = $(this).data('id');
+            $('#DeleteModal').modal('show');
+            $('.mode_id').val(mode_id);
+        });
+    });
+</script>

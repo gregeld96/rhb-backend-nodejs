@@ -1,0 +1,124 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>{{ legend }}</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <form action="/cms/news/add" method="post" class="mb-3" enctype="multipart/form-data">
+                        <input type="text" name="title" value="news" hidden>
+                        <div class="form-group">
+                            <label for="section" class="form-label">Page</label> <br />
+                            <select class="form-select" aria-label="Default select" name="section" id="section">
+                                <option value='news'>News Page</option>
+                                <option selected value='home'>Home Page</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="description" hidden>
+                            <label for="description">Description</label>
+                            <textarea type="text" class="form-control h-50 w-50" name="description"
+                                placeholder="Description here..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Publish at</label><br />
+                            <input type="date" id="publish" name="publishedAt" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="picture">News Picture</label>
+                            <div class="input-group w-50">
+                                <div class="custom-file">
+                                    <input type="file" id="picture" name="news" accept="image/*" placeholder="photo"
+                                        required>
+                                </div>
+                            </div>
+                            <p class="text-muted">Gambar dianjurkan ukuran 640x465 pixels (Home Page) | 600x600 pixels (News
+                                Page)</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="url">Url</label>
+                            <input type="text" class="form-control w-25" id="url" name="url"
+                                placeholder="http://">
+                        </div>
+                        <div>
+                            <button id="create-btn" type="submit" class="my-auto btn btn-primary mr-3 mb-3"><i
+                                    class="fas fa-check mr-1"></i>Create</button>
+                            <a class="btn btn-success" href="/cms/news/">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<script>
+    var _URL = window.URL || window.webkitURL;
+    let section = $('#section').val();
+
+    $('#section').change(function () {
+        section = $(this).val();
+        $("#picture").val('');
+        {{!-- $("#create-btn").prop("disabled", true); --}}
+        if (section == 'news') {
+            $("#description").removeAttr("hidden");
+        } else {
+            $("#description").prop("hidden", true)
+        }
+    });
+
+    {{!-- $("#picture").change(function (e) {
+        var file, img;
+        if ((file = this.files[0])) {
+            img = new Image();
+            img.onload = function () {
+                var width = this.width;
+                var height = this.height;
+                $("#width").html(width);
+                $("#height").html(height);
+                if (section == 'home') {
+                    if (width === 640 && height === 465) {
+                        $("#create-btn").removeAttr("disabled")
+                    } else {
+                        $("#create-btn").prop("disabled", true)
+                        alert("Width must 640px and heigth must 465px");
+                        $("#picture").val('');
+                    }
+                } else {
+                    if (width === 600 && height === 600) {
+                        $("#create-btn").removeAttr("disabled")
+                    } else {
+                        $("#create-btn").prop("disabled", true)
+                        alert("Width must 600px and heigth must 600px");
+                        $("#picture").val('');
+                    }
+                }
+
+            };
+            img.src = _URL.createObjectURL(file);
+        }
+    }); --}}
+</script>

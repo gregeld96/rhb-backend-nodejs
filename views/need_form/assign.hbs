@@ -1,0 +1,499 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex">
+                    <legend>{{ legend }}</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    {{#checkComissionRuanganOnly session.permission.commission_name session.permission.role_name
+                    view_mode }}
+                    <form action="/cms/ruangan/{{needId}}" method="post">
+                        <div class="mb-4">
+                            <div class="mb-1">
+                                <label class="form-check-label">
+                                    Ruangan
+                                </label>
+                            </div>
+                            <div>
+                                <div class="form-check mb-2">
+                                    <label class="mb-1">Lokasi</label>
+                                    <div>
+                                        <input type="radio" name="ruangan" class="location" value='MAG' {{checkValueTrue
+                                            request.ruangan.location 'MAG' }} {{disabled}}>
+                                        <label class="form-check-label" for="mag">Mall Artha Gading</label><br>
+                                        <input type="radio" name="ruangan" class="location" value='Kirana'
+                                            {{checkValueTrue request.ruangan.location 'Kirana' }} {{disabled}}>
+                                        <label class="form-check-label" for="kirana">Graha Kirana</label><br>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div>
+                                        <input type="hidden" name="ruangan" id="consumption" class="form-check-input">
+                                        <label class="form-check-label"><b>Konsumsi</b></label>
+                                    </div>
+                                    {{#if request.ruangan.consumption}}
+                                    <div class="mb-2">
+                                        <input type="checkbox" name="consumption" value='Snack' {{checkArrayValue
+                                            request.ruangan.consumption 'Snack' }} {{disabled}}>
+                                        <label class="form-check-label mr-2">Snack</label>
+                                        <input type="checkbox" name="consumption" value='Prasmanan' {{checkArrayValue
+                                            request.ruangan.consumption 'Prasmanan' }} {{disabled}}>
+                                        <label class="form-check-label mr-2">Prasmanan</label>
+                                        <input type="checkbox" name="consumption" value='Nasi Kotak' {{checkArrayValue
+                                            request.ruangan.consumption 'Nasi Kotak' }} {{disabled}}>
+                                        <label class="form-check-label mr-2">Nasi Kotak</label>
+                                        <input type="checkbox" name="consumption" value='Teh' {{checkArrayValue
+                                            request.ruangan.consumption 'Teh' }} {{disabled}}>
+                                        <label class="form-check-label mr-2">Teh</label>
+                                        <input type="checkbox" name="consumption" value='Kopi' {{checkArrayValue
+                                            request.ruangan.consumption 'Kopi' }} {{disabled}}>
+                                        <label class="form-check-label mr-2">Kopi</label>
+                                        <input type="checkbox" name="consumption" value='Air Mineral' {{checkArrayValue
+                                            request.ruangan.consumption 'Air Mineral' }} {{disabled}}>
+                                        <label class="form-check-label mr-2">Air Mineral</label>
+                                    </div>
+                                    {{else}}
+                                    <div class="mb-2">
+                                        <input type="checkbox" name="consumption" {{disabled}}>
+                                        <label class="form-check-label mr-2">Snack</label>
+                                        <input type="checkbox" name="consumption" {{disabled}}>
+                                        <label class="form-check-label mr-2">Prasmanan</label>
+                                        <input type="checkbox" name="consumption" {{disabled}}>
+                                        <label class="form-check-label mr-2">Nasi Kotak</label>
+                                        <input type="checkbox" name="consumption" {{disabled}}>
+                                        <label class="form-check-label mr-2">Teh</label>
+                                        <input type="checkbox" name="consumption" {{disabled}}>
+                                        <label class="form-check-label mr-2">Kopi</label>
+                                        <input type="checkbox" name="consumption" {{disabled}}>
+                                        <label class="form-check-label mr-2">Air Mineral</label>
+                                    </div>
+                                    {{/if}}
+                                </div>
+                                <div class="form-check">
+                                    <div>
+                                        <input type="hidden" id="unitTable" class="form-check-input">
+                                        <label class="form-check-label"><b>Unit Table</b></label>
+                                    </div>
+                                    {{#if request.ruangan.unitTable}}
+                                    <div class="mb-2">
+                                        <input type="checkbox" name="table" value='Single' {{checkArrayValue
+                                            request.ruangan.unitTable 'Single' }} {{disabled}}>
+                                        <label class="form-check-label mr-2">Single</label>
+                                        <input type="checkbox" name="table" value='Letter U' {{checkArrayValue
+                                            request.ruangan.unitTable 'Letter U' }} {{disabled}}>
+                                        <label class="form-check-label mr-2">Letter U</label>
+                                    </div>
+                                    {{else}}
+                                    <div class="mb-2">
+                                        <input type="checkbox" name="table" {{disabled}}>
+                                        <label class="form-check-label mr-2">Single</label>
+                                        <input type="checkbox" name="table" {{disabled}}>
+                                        <label class="form-check-label mr-2">Letter U</label>
+                                    </div>
+                                    {{/if}}
+                                </div>
+                                <div class="form-check">
+                                    <div>
+                                        <label class="form-check-label"><b>Nama Ruangan</b></label>
+                                    </div>
+                                    <div class="mb-2">
+                                        {{#checkAdminDepartmentAndPermitedDepartment
+                                        session.permission.commission_name 'Ruangan MAG'
+                                        session.permission.role_name}}
+                                        <select class="form-control w-25" name="roomName">
+                                            <option value="Function Hall lt.5">Function Hall lt.5</option>
+                                            <option value="CDC Hall">CDC Hall</option>
+                                            <option value="301">301</option>
+                                            <option value="314">314</option>
+                                        </select>
+                                        {{else}}
+                                        <select class="form-control w-25" name="roomName">
+                                            <option value="Ruang Meeting lt.1">Ruang Meeting lt.1</option>
+                                            <option value="Ruang Meeting lt.2">Ruang Meeting lt.2</option>
+                                            <option value="Studio Tv lt.3">Studio Tv lt.3</option>
+                                            <option value="Function Hall Kirana">Function Hall Kirana</option>
+                                        </select>
+                                        {{/checkAdminDepartmentAndPermitedDepartment}}
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>Jumlah Pax</label><br />
+                                            {{#if request.ruangan.totalPax}}
+                                            <input type="text" id="pax" value="{{request.ruangan.totalPax}}"
+                                                {{disabled}}>
+                                            {{else}}
+                                            <input type="text" id="pax" {{disabled}}>
+                                            {{/if}}
+                                        </div>
+                                        <div class="col">
+                                            <label>Ac dinyalakan</label><br />
+                                            {{#if request.ruangan.airconStart}}
+                                            <input type="datetime-local" id="aircon"
+                                                value="{{request.ruangan.airconStart}}" {{disabled}}>
+                                            {{else}}
+                                            <input type="text" id="pax" {{disabled}}>
+                                            {{/if}}
+                                        </div>
+                                        <div class="col">
+                                            <label>Buka Ruangan Pukul</label><br />
+                                            {{#if request.ruangan.openHour}}
+                                            <input type="datetime-local" id="openHour"
+                                                value="{{request.ruangan.openHour}}" {{disabled}}>
+                                            {{else}}
+                                            <input type="text" id="pax" {{disabled}}>
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="ml-3 table table-bordered table-striped text-center w-50">
+                            <thead>
+                                <th>Mall Artha Gading</th>
+                                <th>Graha Kirana</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Function Hall Lt.5 (3000 org)</td>
+                                    <td>Ruang Meeting Lt.1 (15 org)</td>
+                                </tr>
+                                <tr>
+                                    <td>CDC Hall (200 org)</td>
+                                    <td>Ruang Meeting Lt.2 (15 org)</td>
+                                </tr>
+                                <tr>
+                                    <td>301 (25 org)</td>
+                                    <td>Studio TV Lt.3 (10 org)</td>
+                                </tr>
+                                <tr>
+                                    <td>314 (20 org)</td>
+                                    <td>Function Hall Kirana (50 org)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button type="submit" class="btn btn-primary mb-3">Confirm</button>
+                    </form>
+                    {{else}}
+                    <div class="d-flex">
+                        <div class="card w-50">
+                            <div class="card-header">
+                                Member Selected
+                            </div>
+                            <div class="card-body">
+                                <input id="member" type="text" name="members" hidden>
+                                <div class="row">
+
+                                    <ul id="requirement-need">
+                                    </ul>
+
+                                    <div class="col">
+                                        <ul id="selected-member" class="mt-0">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="my-auto row">
+                            <div class="ml-5 mb-4 col">
+                                <div>
+                                    <label for="role" class="form-label mr-2">Role</label>
+                                    {{#ifDepartment session.permission.commission_name 'Pemusik & Multimedia'}}
+                                    <select class="form-select" aria-label="Default select" id="role">
+                                        {{#each request.musicMultimedia.team}}
+                                        <option value='{{this}}'> {{this}}</option>
+                                        {{/each}}
+                                    </select>
+                                    {{else}}
+                                    {{#ifDepartment session.permission.commission_name 'Design & Creative'}}
+                                    <select class="form-select" aria-label="Default select" id="role">
+                                        <option value="Admin">Admin</option>
+                                    </select>
+                                    {{else}}
+                                    <select class="form-select" aria-label="Default select" id="role">
+                                        <option value="Member Commission">Member Commission</option>
+                                    </select>
+                                    {{/ifDepartment}}
+                                    {{/ifDepartment}}
+                                </div>
+                                <div>
+                                    <label for="role" class="form-label mr-2">Commission</label>
+                                    <select class="form-select" aria-label="Default select" id="commission">
+                                        {{#ifDepartment session.permission.commission_name 'Design & Creative'}}
+                                        {{#if request.creativeVideo.required}}
+                                        <option value="Creative">Creative</option>
+                                        {{/if}}
+                                        {{#if request.designFlyer.required}}
+                                        <option value="Design">Design</option>
+                                        {{/if}}
+                                        {{else}}
+                                        <option value="{{session.permission.commission_id}}">
+                                            {{session.permission.commission_name}}</option>
+                                        {{/ifDepartment}}
+                                    </select>
+                                </div>
+                                <button id="assign-btn" class="btn btn-primary mb-3"><i
+                                        class="fas fa-check pr-1"></i>Assign</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table id="table-user" class="table table-bordered table-striped w-100 text-center">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">FullName</th>
+                                <th style="width: 25%">Phone</th>
+                                <th style="width: 25%">Email</th>
+                                <th style="width: 15%">Role</th>
+                                <th style="width: 10%">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    {{/checkComissionRuanganOnly}}
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<!-- Modal Assign Member-->
+<div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Confirm Assign</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <strong>Anda yakin semua sudah benar ?</strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button class="btn btn-success" id="confirm-btn">Sure</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let role = $("#role").val();
+    let commission = $("#commission").val();
+    let selected = [];
+    let table, data;
+
+    function update_list(list) {
+
+        // clear the existing list
+        $('#selected-member li').remove();
+
+        $.each(list, function (index, userName) {
+            $('#selected-member').append('<li class="d-flex" ><p class="mr-3 my-auto">' + userName.user_name + " - " + userName.role_name + `</p><i onclick="remove(${index})" class="fas fa-times my-auto"></i></li>`)
+        });
+    }
+
+    function requirement() {
+        let complete = [], require = [];
+        $('#requirement-need li').remove();
+
+        if ('{{{session.permission.commission_name}}}' == 'Pemusik & Multimedia') {
+            require = '{{{request.musicMultimedia.team}}}'.split(",")
+            for (let i = 0; i < require.length; i++) {
+                if (selected.length > 0) {
+                    for (let j = 0; j < selected.length; j++) {
+                        if (require[i] == selected[j].role_name) {
+                            $('#requirement-need').append('<li class="d-flex" ><p class="mr-3 my-auto">' + require[i] + `</p><i class="fas fa-check mr-1 my-auto"></i></li>`);
+                            complete.push(true)
+                            break;
+                        } else if (j == selected.length - 1) {
+                            $('#requirement-need').append('<li class="d-flex" ><p class="mr-3 my-auto">' + require[i] + `</p></li>`)
+                        }
+                    }
+                } else {
+                    $('#requirement-need').append('<li class="d-flex" ><p class="mr-3 my-auto">' + require[i] + `</p></li>`)
+                }
+            }
+
+            if (complete.length == require.length) {
+                $('#assign-btn').removeAttr("disabled")
+            } else {
+                $('#assign-btn').prop("disabled", true)
+            }
+        } else if ('{{{session.permission.commission_name}}}' == 'Design & Creative') {
+            if ('{{{request.creativeVideo.required}}}') {
+                require.push('Creative')
+            }
+
+            if ('{{{request.designFlyer.required}}}') {
+                require.push('Design')
+            }
+
+            for (let i = 0; i < require.length; i++) {
+                if (selected.length > 0) {
+                    for (let j = 0; j < selected.length; j++) {
+                        if (require[i] == selected[j].commission) {
+                            $('#requirement-need').append('<li class="d-flex" ><p class="mr-3 my-auto">' + require[i] + `</p><i class="fas fa-check mr-1 my-auto"></i></li>`);
+                            complete.push(true)
+                            break;
+                        } else if (j == selected.length - 1) {
+                            $('#requirement-need').append('<li class="d-flex" ><p class="mr-3 my-auto">' + require[i] + `</p></li>`)
+                        }
+                    }
+                } else {
+                    $('#requirement-need').append('<li class="d-flex" ><p class="mr-3 my-auto">' + require[i] + `</p></li>`)
+                }
+            }
+
+            if (complete.length == require.length) {
+                $('#assign-btn').removeAttr("disabled")
+            } else {
+                $('#assign-btn').prop("disabled", true)
+            }
+        } else {
+            require.push(role)
+
+            for (let i = 0; i < require.length; i++) {
+                if (selected.length > 0) {
+                    for (let j = 0; j < selected.length; j++) {
+                        if (require[i] == selected[j].role_name) {
+                            $('#requirement-need').append('<li class="d-flex" ><p class="mr-3 my-auto">' + require[i] + `</p><i class="fas fa-check mr-1 my-auto"></i></li>`);
+                            complete.push(true)
+                            break;
+                        } else if (j == selected.length - 1) {
+                            $('#requirement-need').append('<li class="d-flex" ><p class="mr-3 my-auto">' + require[i] + `</p></li>`)
+                        }
+                    }
+                } else {
+                    $('#requirement-need').append('<li class="d-flex" ><p class="mr-3 my-auto">' + require[i] + `</p></li>`)
+                }
+            }
+
+            if (complete.length == require.length) {
+                $('#assign-btn').removeAttr("disabled")
+            } else {
+                $('#assign-btn').prop("disabled", true)
+            }
+        }
+    }
+
+    function remove(index) {
+        current = selected.splice(index, 1);
+        update_list(selected)
+        requirement()
+        $('#table-user').DataTable().clear().draw()
+    }
+
+    $(document).ready(function () {
+        requirement()
+
+        $("#role").change(function () {
+            role = $(this).children("option:selected").val();
+            $('#table-user').DataTable().clear().destroy()
+            tableSearch()
+        });
+
+        $("#commission").change(function () {
+            commission = $(this).children("option:selected").val();
+            $('#table-user').DataTable().clear().destroy()
+            tableSearch()
+        });
+
+        function tableSearch() {
+            table = $('#table-user').DataTable({
+                "serverSide": true,
+                "processing": true,
+                "ajax": {
+                    "url": `/cms/commission/members?data=${role}&commission=${commission}`,
+                    "type": "GET"
+                },
+                "columns": [
+                    { "title": 'Fullname', "name": 'full_name' },
+                    { "title": 'Phone', "name": 'phone_number' },
+                    { "title": 'Email', "name": 'email' },
+                    { "sortable": false },
+                    {
+                        "sortable": false,
+                        "targets": -1,
+                        "data": null,
+                        "render": function (data, type, row) {
+                            let has = '';
+                            for (let i = 0; i < selected.length; i++) {
+                                if (selected[i].user_id == data[6]) {
+                                    has = 'disabled'
+                                }
+                            }
+                            if (has) {
+                                return `
+                                <button class="btn btn-outline-secondary ${has}" type="button"><i class="fas fa-plus mr-2"></i>Add</button>
+                            `
+                            } else {
+                                return `
+                                <button class="btn btn-outline-secondary" type="button" id="add-btn"><i class="fas fa-plus mr-2"></i>Add</button>
+                            `
+                            }
+                        }
+                    }
+                ]
+            })
+        }
+
+        tableSearch()
+
+        $('#table-user tbody').on('click', '#add-btn', function () {
+            data = table.row($(this).parents('tr')).data();
+            selected.push({
+                user_name: data[0],
+                user_id: data[6],
+                role_name: role,
+                commission
+            });
+            $('#table-user').DataTable().clear().draw()
+            update_list(selected)
+            requirement()
+        })
+
+        function submitMember() {
+            return $.ajax({
+                url: `/cms/commission/{{{needId}}}`,
+                method: 'POST',
+                data: { selected }
+            })
+                .then((data) => {
+                    window.location.href = data.redirectUrl
+                })
+        }
+
+        $("#assign-btn").click(function () {
+            $("#ConfirmModal").modal("show")
+        })
+
+        $("#confirm-btn").click(function () {
+            submitMember()
+        })
+
+    });
+
+
+</script>

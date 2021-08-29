@@ -1,0 +1,120 @@
+<div class="container-fluid">
+    <div style="text-align: right; padding-bottom: 20px;">
+        <a class="btn btn-success" href="/cms/pasteur-message/add-message">
+            <i class="fas fa-plus"></i> Add Message
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>List of Pasteur Message</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <table id="table_general1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">Title</th>
+                                <th style="width: 35%">Description</th>
+                                <th style="width: 15%">Publish At</th>
+                                <th style="width: 25%">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<!-- Modal Delete User-->
+<form id="add-row-form" action="/cms/pasteur-message/delete/" method="post">
+    <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Delete user</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <strong>Anda yakin mau menghapus data ini?</strong>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="message_id" class="form-control message_id" required>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        let table = $('#table_general1').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": `/cms/pasteur-message/list`,
+                "type": "GET"
+            },
+            "columns": [
+                { "name": 'title' },
+                { "sortable": false },
+                { "name": 'publishedAt' },
+                {
+                    "sortable": false,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return `
+                            <a class="btn btn-info btn-sm" href="/cms/pasteur-message/detail/${data[3]}">
+                                <i class="far fa-file-alt pr-1">
+                                </i>
+                                Detail
+                            </a>
+                            <a class="btn btn-secondary btn-sm" href="/cms/pasteur-message/edit/${data[3]}">
+                                <i class="fas fa-pencil-alt pr-1"></i>
+                                Edit
+                            </a>
+                            <a class="btn btn-danger btn-sm delete" href="javascript:void(0);" data-id="${data[3]}">
+                                <i class="fas fa-trash pr-1">
+                                </i>
+                                Delete
+                            </a>
+                        `
+                    }
+                }
+            ]
+        })
+
+        $('#table_general1').on('click', '.delete', function () {
+            var message_id = $(this).data('id');
+            $('#DeleteModal').modal('show');
+            $('.message_id').val(message_id);
+        });
+    })
+</script>

@@ -1,0 +1,231 @@
+<div class="container-fluid">
+    <div style="text-align: right; padding-bottom: 20px;">
+        <a class="btn btn-success" href="/cms/{{section}}/add">
+            <i class="fas fa-plus"></i> Add Schedule
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    {{#GeneralSectionMode section 'baptism'}}
+                    <legend>List of Baptism Schedule</legend>
+                    {{else}}
+                    <legend>List of Dedication Schedule</legend>
+                    {{/GeneralSectionMode}}
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <table id="table_general1" class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Time Start</th>
+                                <th style="width: 20%">Time End</th>
+                                <th style="width: 10%">Quota</th>
+                                <th style="width: 20%">Title</th>
+                                <th style="width: 30%">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<!-- Modal Delete Produk-->
+<form id="add-row-form" action="/cms/{{section}}/schedule/delete/" method="post">
+    <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <strong>Anda yakin mau menghapus data ini?</strong>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="schedule_id" class="form-control schedule_id" required>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+
+    $(document).ready(function () {
+        let section = '{{{section}}}';
+
+        table = $('#table_general1').DataTable({
+            "searching": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": `/cms/${section}/list?section=${section}`,
+                "type": "GET"
+            },
+            "columns": [
+                { "name": 'time_start', "data": "time_start" },
+                { "name": 'time_end', "data": "time_end" },
+                { "sortable": false, "data": "quota" },
+                { "name": 'title', "data": "title" },
+                {
+                    "sortable": false,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        if (data['participant'] > 0) {
+                            if (section == 'baptism') {
+                                return `
+                                    <a class="btn btn-info btn-sm my-1" href="/cms/needs/detail/${data['need_id']}" >
+                                        <i class="far fa-file-alt pr-1"></i>
+                                        Detail
+                                    </a >
+                                    <a class="btn btn-info btn-sm my-1" href="/cms/${section}/participant?id=${data["id"]}">
+                                        <i class="fas fa-list pr-1"></i>
+                                        Participant
+                                    </a>
+                                    <a class="btn btn-info btn-sm my-1" href="/cms/needs/add-need/${data["need_id"]}?section=${section}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        Needs
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm my-1" href="/cms/${section}/edit/${data["id"]}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        Edit
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm my-1" href="/cms/class/list/${section}/${data["id"]}">
+                                        <i class="far fa-file-alt pr-1"></i>
+                                        List Class
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm my-1" href="/cms/class/add/${section}/${data["id"]}">
+                                        <i class="fas fa-plus"></i>
+                                        Add Class
+                                    </a>
+                                    <a class="btn btn-danger btn-sm delete my-1" href="javascript:void(0);" data-id="${data["id"]}">
+                                        <i class="fas fa-trash pr-1">
+                                            </i>
+                                        Delete
+                                    </a>
+                                `
+                            } else {
+                                return `
+                                    <a class="btn btn-info btn-sm my-1" href="/cms/needs/detail/${data['need_id']}" >
+                                        <i class="far fa-file-alt pr-1"></i>
+                                        Detail
+                                    </a >
+                                    <a class="btn btn-info btn-sm my-1" href="/cms/${section}/participant?id=${data["id"]}">
+                                        <i class="fas fa-list pr-1"></i>
+                                        Participant
+                                    </a>
+                                    <a class="btn btn-info btn-sm my-1" href="/cms/needs/add-need/${data["need_id"]}?section=${section}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        Needs
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm my-1" href="/cms/${section}/edit/${data["id"]}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        Edit
+                                    </a>
+                                    <a class="btn btn-danger btn-sm delete my-1" href="javascript:void(0);" data-id="${data["id"]}">
+                                        <i class="fas fa-trash pr-1">
+                                            </i>
+                                        Delete
+                                    </a>
+                                `
+                            }
+                        } else {
+                            if (section == 'baptism') {
+                                return `
+                                    <a class="btn btn-info btn-sm my-1" href="/cms/needs/detail/${data['need_id']}" >
+                                        <i class="far fa-file-alt pr-1"></i>
+                                        Detail
+                                    </a >
+                                    <a class="btn btn-info btn-sm my-1" href="/cms/${section}/participant?id=${data["id"]}">
+                                        <i class="fas fa-list pr-1"></i>
+                                        Participant
+                                    </a>
+                                    <button class="btn btn-info btn-sm my-1" disabled>
+                                            <i class="fas fa-pencil-alt pr-1"></i>
+                                        Needs
+                                    </button>
+                                    <a class="btn btn-secondary btn-sm my-1" href="/cms/${section}/edit/${data["id"]}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        Edit
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm my-1" href="/cms/class/list/${section}/${data["id"]}">
+                                        <i class="far fa-file-alt pr-1"></i>
+                                        List Class
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm my-1" href="/cms/class/add/${section}/${data["id"]}">
+                                        <i class="fas fa-plus"></i>
+                                        Add Class
+                                    </a>
+                                    <a class="btn btn-danger btn-sm delete my-1" href="javascript:void(0);" data-id="${data["id"]}">
+                                        <i class="fas fa-trash pr-1">
+                                            </i>
+                                        Delete
+                                    </a>
+                                `
+                            } else {
+                                return `
+                                    <a class="btn btn-info btn-sm my-1" href="/cms/needs/detail/${data['need_id']}" >
+                                        <i class="far fa-file-alt pr-1"></i>
+                                        Detail
+                                    </a >
+                                    <a class="btn btn-info btn-sm my-1" href="/cms/${section}/participant?id=${data["id"]}">
+                                        <i class="fas fa-list pr-1"></i>
+                                        Participant
+                                    </a>
+                                    <button class="btn btn-info btn-sm my-1" disabled>
+                                            <i class="fas fa-pencil-alt pr-1"></i>
+                                        Needs
+                                    </button>
+                                    <a class="btn btn-secondary btn-sm my-1" href="/cms/${section}/edit/${data["id"]}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        Edit
+                                    </a>
+                                    <a class="btn btn-danger btn-sm delete my-1" href="javascript:void(0);" data-id="${data["id"]}">
+                                        <i class="fas fa-trash pr-1">
+                                            </i>
+                                        Delete
+                                    </a>
+                                `
+                            }
+                        }
+                    }
+                }
+            ]
+        })
+
+        $('#table_general1').on('click', '.delete', function () {
+            var schedule_id = $(this).data('id');
+            $('#DeleteModal').modal('show');
+            $('.schedule_id').val(schedule_id);
+        });
+    });
+</script>

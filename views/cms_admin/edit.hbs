@@ -1,0 +1,80 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>Add Admin Commission</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <form action="/cms/edit-admin/{{data.id}}" method="post" class="mb-3">
+                        <div class="d-flex">
+                            <div class="card w-50">
+                                <div class="card-header">
+                                    User Selected
+                                </div>
+                                <div class="card-body">
+                                    <div id="selected">
+                                        <p>{{data.user_name}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="my-auto">
+                                <div class="ml-5 mb-4">
+                                    <div>
+                                        <label for="role" class="form-label mr-2">Role</label>
+                                        <select class="form-select" aria-label="Default select" name="role">
+                                            {{#selectValueTrue data.role_id}}
+                                            {{#each roles}}
+                                            <option value='{{id}}'> {{name}}</option>
+                                            {{/each}}
+                                            {{/selectValueTrue}}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="role" class="form-label mr-2">Department</label>
+                                        <select class="form-select" aria-label="Default select" name="department">
+                                            {{#selectValueTrue data.commission_id}}
+                                            {{#each commissions}}
+                                            <option value="{{id}}">{{name}}</option>
+                                            {{/each}}
+                                            {{/selectValueTrue}}
+                                        </select>
+                                    </div>
+                                </div>
+                                <button id="save-btn" type="submit" class="btn btn-primary ml-5 mb-3"><i
+                                        class="fas fa-check pr-1"></i>Save</button>
+                                <a class="btn btn-success mb-3" href="/cms/cms-admin">
+                                    <i class="fas fa-times pr-1"></i> Cancel
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<script>
+
+</script>

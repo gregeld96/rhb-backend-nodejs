@@ -1,0 +1,120 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>{{ legend }}</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <form action="/cms/{{section}}/edit/{{data.need_id}}" method="post" class="mb-3">
+                            <input type="text" class="form-control w-25" name="section" value='{{section}}' hidden>
+                            <div class="form-group">
+                                <label for="quota">Title</label>
+                                <input type="text" class="form-control w-25" id="title" name="title"
+                                    value="{{data.title}}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="quota">Quota</label>
+                                <input type="number" class="form-control w-25" id="quota" name="quota"
+                                    value="{{data.quota}}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="my-auto mr-3" for="member-list">Pelaksana</label>
+                                <div>
+                                    <input class="form-control w-25" list="member-list" name="member" required
+                                        value="{{data.member.name}}" id="speaker" />
+                                    <datalist id="member-list">
+                                        {{#each members}}
+                                        <option value='{{name}}'></option>
+                                        {{/each}}
+                                    </datalist>
+                                    <p id="no-user" hidden class="ml-2 mb-0">No User Found</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-4">
+                                    <label for="example-datetime-local-input" class="col-form-label">Time Start</label>
+                                    <div>
+                                        <input class="form-control" type="datetime-local"
+                                            id="example-datetime-local-input" name="time_start"
+                                            value="{{data.time_start}}" required>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <label for="example-datetime-local-input" class="col-form-label">Time End</label>
+                                    <div>
+                                        <input class="form-control" type="datetime-local"
+                                            id="example-datetime-local-input" name="time_end" value="{{data.time_end}}"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <button id="create-btn" type="submit"
+                                        class="my-auto btn btn-primary mr-3 mb-3"><i
+                                            class="fas fa-check mr-1"></i>Update</button>
+                                    <a class="btn btn-success" href="/cms/{{section}}/">
+                                        <i class="fas fa-times"></i> Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<script>
+    $(document).ready(function () {
+        $('#speaker').on('input', function () {
+            let input = $(this).val()
+            let optionFound = false;
+            let datalist = this.list
+            var strRegExPattern = input;
+            // Determine whether an option exists with the current value of the input.
+            for (var j = 0; j < datalist.options.length; j++) {
+                if (datalist.options[j].value.match(new RegExp(strRegExPattern, 'gi'))) {
+                    optionFound = true;
+                    break;
+                }
+            }
+
+            for (var j = 0; j < datalist.options.length; j++) {
+                if ($(this).val() == datalist.options[j].value) {
+                    $("#create-btn").removeAttr("disabled")
+                    break;
+                } else {
+                    $("#create-btn").prop("disabled", true)
+                }
+            }
+
+            if (optionFound) {
+                $("#no-user").attr("hidden", "hidden")
+            } else {
+                $("#no-user").removeAttr("hidden")
+            }
+        })
+    })
+</script>

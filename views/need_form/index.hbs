@@ -1,0 +1,247 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex">
+                    <legend>{{ legend }}</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    {{#checkComissionRuanganOnly session.permission.commission_name session.permission.role_name view_mode}}
+                    <form>
+                    {{else}}
+                    <form>
+                    {{/checkComissionRuanganOnly}}
+                        {{#checkComissionRuanganOnly session.permission.commission_name session.permission.role_name view_mode }}
+                        <div class="mb-4">
+                            <div class="mb-1">
+                                <label class="form-check-label">
+                                    Ruangan
+                                </label>
+                            </div>
+                            <div>
+                                <div class="form-check mb-2">
+                                    <label class="mb-1">Lokasi</label>
+                                    <div>
+                                        <input type="radio" name="ruangan" class="location" 
+                                            value='MAG' {{checkValueTrue request.ruangan.location 'MAG'}} {{disabled}}>
+                                        <label class="form-check-label" for="mag">Mall Artha Gading</label><br>
+                                        <input type="radio" name="ruangan" class="location"
+                                            value='Kirana' {{checkValueTrue request.ruangan.location 'Kirana'}} {{disabled}}>
+                                        <label class="form-check-label" for="kirana">Graha Kirana</label><br>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div>
+                                        <input type="hidden" name="ruangan" id="consumption" class="form-check-input">
+                                        <label class="form-check-label"><b>Konsumsi</b></label>
+                                    </div>
+                                    <div class="mb-2">
+                                        <input type="checkbox" name="consumption" value='Snack' {{checkArrayValue request.ruangan.consumption 'Snack'}} {{disabled}}>
+                                        <label class="form-check-label mr-2">Snack</label>
+                                        <input type="checkbox" name="consumption" value='Prasmanan' {{checkArrayValue request.ruangan.consumption 'Prasmanan'}} {{disabled}}>
+                                        <label class="form-check-label mr-2">Prasmanan</label>
+                                        <input type="checkbox" name="consumption" value='Nasi Kotak' {{checkArrayValue request.ruangan.consumption 'Nasi Kotak'}} {{disabled}}>
+                                        <label class="form-check-label mr-2">Nasi Kotak</label>
+                                        <input type="checkbox" name="consumption" value='Teh' {{checkArrayValue request.ruangan.consumption 'Teh'}} {{disabled}}>
+                                        <label class="form-check-label mr-2">Teh</label>
+                                        <input type="checkbox" name="consumption" value='Kopi' {{checkArrayValue request.ruangan.consumption 'Kopi'}} {{disabled}}>
+                                        <label class="form-check-label mr-2">Kopi</label>
+                                        <input type="checkbox" name="consumption" value='Air Mineral' {{checkArrayValue request.ruangan.consumption 'Air Mineral'}} {{disabled}}>
+                                        <label class="form-check-label mr-2">Air Mineral</label>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div>
+                                        <input type="hidden" name="ruangan" id="unitTable" class="form-check-input">
+                                        <label class="form-check-label"><b>Unit Table</b></label>
+                                    </div>
+                                    <div class="mb-2">
+                                        <input type="checkbox" name="table" value='Single' {{checkArrayValue request.ruangan.consumption 'Air Mineral'}} {{disabled}}>
+                                        <label class="form-check-label mr-2">Single</label>
+                                        <input type="checkbox" name="table" value='Letter U' {{checkArrayValue request.ruangan.consumption 'Air Mineral'}} {{disabled}}>
+                                        <label class="form-check-label mr-2">Letter U</label>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>Jumlah Pax</label><br />
+                                            <input type="text" id="pax" name="ruangan" value="{{request.ruangan.totalPax}}">
+                                        </div>
+                                        <div class="col">
+                                            <label>Ac dinyalakan</label><br />
+                                            <input type="datetime-local" id="aircon" value="{{request.ruangan.airconStart}}">
+                                            <input type="text" id="aircond_start" name="ruangan" hidden>
+                                        </div>
+                                        <div class="col">
+                                            <label>Buka Ruangan Pukul</label><br />
+                                            <input type="datetime-local" id="openHour" value="{{request.ruangan.openHour}}">
+                                            <input type="text" id="open_date" name="ruangan" hidden>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/checkComissionRuanganOnly}}
+                        {{#checkPermitedDepartmentEditModeOrViewMode session.permission.commission_name 'Pemusik & Multimedia' view_mode}}
+                        <div class="mb-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="musicMultimedia"
+                                    value='{"keys":"required", "value": true}'>
+                                <label class="form-check-label">
+                                    Pemusik dan Multimedia
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <div>
+                                    <input type="text" name="musicMultimedia" id="role" hidden>
+                                    <label><b>Team</b></label><br />
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="role" value='Workship Leader'>
+                                    <label class="form-check-label mr-2">Workship Leader</label>
+                                    <input type="checkbox" name="role" value='Singer'>
+                                    <label class="form-check-label mr-2">Singer</label>
+                                    <input type="checkbox" name="role" value='Keyboardist'>
+                                    <label class="form-check-label mr-2">Keyboardist</label>
+                                    <input type="checkbox" name="role" value='Guitarist'>
+                                    <label class="form-check-label mr-2">Guitarist</label>
+                                    <input type="checkbox" name="role" value='Drummer'>
+                                    <label class="form-check-label mr-2">Drummer</label>
+                                    <input type="checkbox" name="role" value='Bassist'>
+                                    <label class="form-check-label mr-2">Bassist</label>
+                                    <input type="checkbox" name="role" value='Perkusi'>
+                                    <label class="form-check-label mr-2">Perkusi</label> <br />
+                                    <input type="checkbox" name="role" value='Orchestra'>
+                                    <label class="form-check-label mr-2">Orchestra</label>
+                                    <input type="checkbox" name="role" value='Soundman'>
+                                    <label class="form-check-label mr-2">Soundman</label>
+                                    <input type="checkbox" name="role" value='Lighting'>
+                                    <label class="form-check-label mr-2">Lighting</label>
+                                    <input type="checkbox" name="role" value='Sreaming'>
+                                    <label class="form-check-label">Streaming</label>
+                                    <input type="checkbox" name="role" value='Multimedia'>
+                                    <label class="form-check-label mr-2">Multimedia</label>
+                                    <input type="checkbox" name="role" value='Kameramen'>
+                                    <label class="form-check-label mr-2">Kameramen</label>
+                                </div>
+                            </div>
+                        </div>
+                        {{/checkPermitedDepartmentEditModeOrViewMode}}
+                        {{#checkPermitedDepartmentEditModeOrViewMode session.permission.commission_name 'Design and Creative' view_mode}}
+                        <div class="mb-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="designFlyer"
+                                    value='{"keys":"required", "value": true}'>
+                                <label class="form-check-label">
+                                    Design Flyer
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label><b>Keterangan</b></label><br />
+                                <textarea type="text" id="design" name="designFlyer" rows="2"
+                                    class="form-control"></textarea>
+                                <input type="text" class="link" name="designFlyer" hidden>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="creativeVideo"
+                                    value='{"keys":"required", "value": true}'>
+                                <label class="form-check-label">
+                                    Creative Video
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" name="creativeVideo" value='{"keys":"shooting", "value": true}'>
+                                <label class="form-check-label">Shooting</label><br />
+                                <input type="checkbox" name="creativeVideo" value='{"keys":"editing", "value": true}'>
+                                <label class="form-check-label">Editing</label><br />
+                                <label><b>Keterangan</b></label><br />
+                                <textarea type="text" id="creative" name="creativeVideo" rows="2"
+                                    class="form-control"></textarea>
+                                <input type="text" class="link" name="creativeVideo" hidden>
+                            </div>
+                        </div>
+                        {{/checkPermitedDepartmentEditModeOrViewMode}}
+                        {{#checkPermitedDepartmentEditModeOrViewMode session.permission.commission_name 'Design and Creative' view_mode}}
+                        <div class="mb-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="it"
+                                    value='{"keys":"required", "value": true}'>
+                                <label class="form-check-label">
+                                    IT
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" name="it" value='{"keys":"onlineForm", "value": true}'>
+                                <label class="form-check-label">Online Form</label><br />
+                                <input type="checkbox" name="it" value='{"keys":"whatsAppBlast", "value": true}'>
+                                <label class="form-check-label">WhatsApp Blast</label><br />
+                                <input type="checkbox" name="it" value='{"keys":"smsBlast", "value": true}'>
+                                <label class="form-check-label">SMS Blasting</label><br />
+                                <label><b>Keterangan</b></label><br />
+                                <textarea type="text" id="it_field" name="it" rows="2" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        {{/checkPermitedDepartmentEditModeOrViewMode}}
+                        {{#checkPermitedDepartmentEditModeOrViewMode session.permission.commission_name 'Security {{request.security.location}}' view_mode}}
+                        <div class="mb-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="security"
+                                    value='{"keys":"required", "value": true}'>
+                                <label class="form-check-label">
+                                    Security
+                                </label>
+                                <input type="text" id="security-location" name="security" hidden>
+                            </div>
+                        </div>
+                        {{/checkPermitedDepartmentEditModeOrViewMode}}
+                        {{#checkPermitedDepartmentEditModeOrViewMode session.permission.commission_name 'Social Media' view_mode}}
+                        <div class="mb-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="socialMedia"
+                                    value='{"keys":"required", "value": true}'>
+                                <label class="form-check-label">
+                                    Social Media
+                                </label>
+                                <input type="text" class="link" name="socialMedia" hidden>
+                            </div>
+                        </div>
+                        {{/checkPermitedDepartmentEditModeOrViewMode}}
+                        {{#checkEditModeOrViewMode view_mode}}
+                        <button type="submit" class="btn btn-primary mb-3" id="confirm-btn">Confirm</button>
+                        {{/checkEditModeOrViewMode}}
+                    </form>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<script>
+    $(document).ready(function () {
+       
+    });
+
+</script>

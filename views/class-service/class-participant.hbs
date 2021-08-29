@@ -1,0 +1,170 @@
+<div class="container-fluid">
+    <div style="text-align: right; padding-bottom: 20px;">
+        <a class="btn btn-success" href="/cms/class/list/{{section}}/{{event_id}}">
+            <i class="fas fa-arrow-circle-left"></i> Back
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>{{legend}}</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <table id="table_general1" class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">Full Name</th>
+                                <th style="width: 20%">Phone Number</th>
+                                <th style="width: 25%">Email</th>
+                                <th style="width: 10%">Status</th>
+                                <th style="width: 20%">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<!-- Modal Status Participant-->
+<form id="add-row-form" action="/cms/class/participant/{{section}}/{{event_id}}/" method="post">
+    <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Decision Approval</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <strong>Anda yakin dengan ini?</strong>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="_method" value="CREATE">
+                    <input type="hidden" name="id" class="form-control user_class_id" required>
+                    <input type="hidden" name="class_id" class="form-control" value="{{class_id}}" required>
+                    <input type="hidden" name="status" class="form-control status" required>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        table = $('#table_general1').DataTable({
+            "searching": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": `/cms/class/participant/list?class_id={{{class_id}}}`,
+                "type": "GET"
+            },
+            "columns": [
+                {
+                    "name": 'full_name',
+                    "sortable": true,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return `
+                                <p>${data['name']}</p>
+                                `
+                    }
+                },
+                {
+                    "sortable": false,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return `
+                                <p>${data['phone_number']}</p>
+                                `
+                    }
+                },
+                {
+                    "sortable": false,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return `
+                                <p>${data['email']}</p>
+
+                                `
+                    }
+                },
+                {
+                    "name": 'status',
+                    "sortable": false,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        if(data['status'] == true ){
+                            return `
+                                    <p>Attend</p>
+                                    `
+                        } else if (data['status'] == false) {
+                            return `
+                                    <p>Absent</p>
+                                    `
+                        } else {
+                            return `
+                                    <p>In Review</p>
+                                    `
+                        }
+                    }
+                },
+                {
+                    "sortable": false,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                            return `
+                                 <a class="btn btn-secondary btn-sm approval" href="javascript:void(0);" data-id="${data["id"]}" data-status="true">
+                                    <i class="fas fa-pencil-alt pr-1"></i>
+                                    Attend
+                                </a>
+                                <a class="btn btn-secondary btn-sm approval" href="javascript:void(0);" data-id="${data["id"]}" data-status="false">
+                                    <i class="fas fa-pencil-alt pr-1"></i>
+                                    Absent
+                                </a>
+                                `
+                    }
+                }
+            ]
+        })
+
+        $('#table_general1').on('click', '.approval', function () {
+            let user_class_id = $(this).data('id');
+            let status = $(this).data('status');
+            $('#DeleteModal').modal('show');
+            $('.user_class_id').val(user_class_id);
+            $('.status').val(status);
+        });
+    });
+</script>

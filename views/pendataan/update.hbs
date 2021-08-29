@@ -1,0 +1,60 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>{{ legend }}</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <form action="/cms/pendataan-jemaat/file/{{data.id}}" method="post" class="mb-3"
+                        enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="identification">KTP</label> <br />
+                            <img src="/photos/private/user/ktp/{{data.identification_file}}"
+                                alt="identification {{data.name}}" style="max-width: 200px; max-height: 200px;">
+                            <div class="input-group w-50">
+                                <div class="custom-file">
+                                    <input type="text" hidden name="full_name" value="{{data.name}}">
+                                    <input type="file" id="identification"
+                                        name="identification_file" accept="image/*" placeholder="photo">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button id="create-btn" type="submit" class="my-auto btn btn-primary mr-3 mb-3"><i
+                                    class="fas fa-check mr-1"></i>Update</button>
+                            <a class="btn btn-success" href="/cms/pendataan-jemaat/list">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                </div>
+                </form>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<script>
+
+</script>

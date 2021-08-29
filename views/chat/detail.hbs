@@ -1,0 +1,91 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <legend>{{section}}</legend>
+                        </div>
+                        <div class="col-4">
+                            <div style="text-align: right; padding-bottom: 20px;">
+                                <a class="btn btn-success" href="/cms/chat/">
+                                    <i class="fas fa-arrow-circle-left"></i> Back
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body" style="overflow: scroll; height: 500px">
+                    {{#each message}}
+                    {{#if status}}
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <p style="border-top: 2px grey solid; width:100%"></p>
+                        </div>
+                        <div class="col-12">
+                             <p style="text-align: center;">
+                                {{date}}
+                            </p>
+                        </div>
+                        <div class="col-12">
+                            <p style="border-bottom: 2px grey solid; width:100%"></p>
+                        </div>
+                    </div>
+                    {{/if}}
+                    {{#if belongsAdmin}}
+                    <div class="d-flex align-items-end flex-column mb-3">
+                        <div class="card w-50 py-0 m-0">
+                            <div class="card-body">
+                                <p style="color: black">{{message}}</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            {{#if seenAt}}
+                            <p style="color: grey">seen</p>
+                            {{/if}}
+                            <p style="padding-left: 10px; padding-right: 5px">{{sentAt}}</p>
+                        </div>
+
+                    </div>
+                    {{else}}
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card w-50">
+                                <div class="card-body">
+                                    <p style="color: black">{{message}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <p>{{sentAt}}</p>
+                        </div>
+                    </div>
+                    {{/if}}
+                    {{/each}}
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <div class="col-12">
+            <form class="my-3" style="width: 100%;" action="/cms/chat/reply" method="post">
+                <div class="row align-items-center">
+                    <input value="{{user_id}}" name="user_id" hidden>
+                    <div class="col-10">
+                        <textarea type="text" class="form-control" placeholder="Type a message"
+                            name="message"></textarea>
+                    </div>
+                    <div class="col-2">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->

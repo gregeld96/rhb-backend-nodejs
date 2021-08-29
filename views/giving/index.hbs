@@ -1,0 +1,111 @@
+<div class="container-fluid">
+    <div style="text-align: right; padding-bottom: 20px;">
+        <a class="btn btn-success" href="/cms/dynamic-pages/giving/add">
+            <i class="fas fa-plus"></i> Add Giving
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>List of Giving</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <table id="table_general" class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%">Bank</th>
+                                <th style="width: 30%">Holder</th>
+                                <th style="width: 15%">No Rekening</th>
+                                <th style="width: 20%">QR</th>
+                                <th style="width: 20%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each data}}
+                            <tr>
+                                <td>{{bank}}</td>
+                                <td>{{holder}}</td>
+                                <td>{{no_rek}}</td>
+                                <td>
+                                    <img src="/photos/public/giving/{{qr}}" alt="QR - {{bank}}" width="120"
+                                        height="120">
+                                </td>
+                                <td>
+                                    <a class="btn btn-secondary btn-sm"
+                                        href="/cms/dynamic-pages/giving/edit/{{id}}">
+                                        <i class="fas fa-pencil-alt pr-1">
+                                        </i>
+                                        Edit Giving
+                                    </a>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-danger delete"
+                                        data-id="{{id}}">
+                                        <i class="fas fa-trash">
+                                        </i>
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<!-- Modal Delete User-->
+<form id="add-row-form" action="/cms/dynamic-pages/giving/delete/" method="post">
+    <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Delete Data</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <strong>Anda yakin mau menghapus data ini?</strong>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="giving_id" class="form-control giving_id" required>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#table_general').on('click', '.delete', function () {
+            var giving_id = $(this).data('id');
+            $('#DeleteModal').modal('show');
+            $('.giving_id').val(giving_id);
+        });
+    })
+</script>

@@ -1,0 +1,132 @@
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <legend>List of Registered User</legend>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            {{#if messages.msg_info}}
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Success!</h5>
+                {{messages.msg_info}}
+            </div>
+            {{/if}}
+            {{#if messages.msg_error}}
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                {{messages.msg_error}}
+            </div>
+            {{/if}}
+            <div class="my-auto">
+                <div class="mb-4">
+                    <div>
+                        <label for="role" class="mr-2">Status</label>
+                        <select class="form-select" aria-label="Default select" id="status">
+                            <option value="false" selected>Incomplete</option>
+                            <option value="true">Complete</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <table id="table-user" class="table table-bordered table-striped text-center">
+                <thead>
+                    <tr>
+                        <th style="width: 200px">FullName</th>
+                        <th style="width: 125px">Phone</th>
+                        <th style="width: 200px">Email</th>
+                        <th style="width: 300px">Address</th>
+                        <th>Gender</th>
+                        <th style="width: 100px">BOP</th>
+                        <th style="width: 100px">BOD</th>
+                        <th>Occupation</th>
+                        <th>KTP</th>
+                        <th style="width: 250px">Action</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</div>
+<!-- /.container-fluid -->
+
+<script>
+    let status = $("#status").val();
+
+    $(document).ready(function () {
+        $("#status").change(function () {
+            status = $(this).children("option:selected").val();
+            $('#table-user').DataTable().clear().destroy()
+            tableSearch()
+        });
+
+        function tableSearch() {
+            table = $('#table-user').DataTable({
+                "scrollX": true,
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": `/cms/pendataan-jemaat?status=${status}`,
+                    "type": "GET"
+                },
+                "columns": [
+                    { "name": 'full_name' },
+                    { "name": 'phone_number' },
+                    { "name": 'email' },
+                    { "sortable": false },
+                    { "name": 'gender' },
+                    { "name": 'birth_place' },
+                    { "name": 'birth_of_date' },
+                    { "name": 'occupation' },
+                    {
+                        "sortable": false,
+                        "targets": -1,
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return `
+                                <img src="/photos/private/user/ktp/${data[8]}" alt="${data[0]}" width="120" height="100">
+                            `
+
+                        }
+                    },
+                    {
+                        "sortable": false,
+                        "targets": -1,
+                        "data": null,
+                        "render": function (data, type, row) {
+                            if (data[10] == 'true') {
+                                return `
+                                    <a class="btn btn-info btn-sm" href="/cms/pendataan-jemaat/edit/${data[9]}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        Update KTP
+                                    </a>
+                                `
+                            } else {
+                                return `
+                                    <a class="btn btn-info btn-sm" href="/cms/pendataan-jemaat/edit/${data[9]}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        Update KTP
+                                    </a>
+                                    <a class="btn btn-info btn-sm" href="/cms/pendataan-jemaat/${data[9]}">
+                                        <i class="fas fa-check mr-1"></i>
+                                        Approved
+                                    </a>
+                                `
+                            }
+
+                        }
+                    }
+                ]
+            })
+        }
+
+        tableSearch()
+    })
+
+
+
+</script>

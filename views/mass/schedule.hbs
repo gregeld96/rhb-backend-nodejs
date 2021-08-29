@@ -1,0 +1,157 @@
+<div class="container-fluid">
+    <div style="text-align: right; padding-bottom: 20px;">
+        <a class="btn btn-success" href="/cms/penjadwalan/category">
+            <i class="fas fa-arrow-circle-left"></i> Back
+        </a>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <legend>List of Event</legend>
+        </div>
+        <div class="card-body">
+            {{#if messages.msg_info}}
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Success!</h5>
+                {{messages.msg_info}}
+            </div>
+            {{/if}}
+            {{#if messages.msg_error}}
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                {{messages.msg_error}}
+            </div>
+            {{/if}}
+            <input hidden id="category-id" value="{{ categoryId }}" />
+            <table id="scheduleTable" class="table table-bordered table-striped text-center w-100">
+                <thead>
+                    <tr>
+                        <th style="width: 15%">Start Time</th>
+                        <th style="width: 15%">End Time</th>
+                        <th style="width: 15%">Title</th>
+                        <th style="width: 10%">Location</th>
+                        <th style="width: 15%">Room</th>
+                        <th style="width: 40%">Action</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Delete Produk-->
+<form id="add-row-form" action="/cms/event/delete/" method="post">
+    <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Delete FAQ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <strong>Anda yakin mau menghapus data ini?</strong>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="need_id" class="form-control need_id" required>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    let categoryId = $('#category-id').val();
+
+    $(document).ready(function () {
+        //Render Data for data table
+        let table = $('#scheduleTable').DataTable({
+            "scrollX": true,
+            "order": [[0, "desc"]],
+            "searching": false,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": `/cms/penjadwalan/list?category_id=${Number(categoryId)}`,
+                "type": "GET"
+            },
+            "columns": [
+                { "name": 'time_start' },
+                { "name": 'time_end' },
+                { "sortable": false },
+                { "sortable": false },
+                { "sortable": false },
+                {
+                    "sortable": false,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        if (data[3] != 'TBA') {
+                            return `
+                                    <a class="btn btn-info btn-sm" href="/cms/needs/detail/${data[5]}">
+                                        <i class="far fa-file-alt pr-1"></i>
+                                        Detail
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm" href="/cms/needs/add-need/${data[5]}">
+                                        <i class="fas fa-pencil-alt pr-1">
+                                        </i>
+                                        Need
+                                    </a>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="${data[5]}">
+                                        <i class="fas fa-trash pr-1">
+                                        </i>
+                                        Delete
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm" href="/cms/event/edit/${data[5]}">
+                                        <i class="fas fa-pencil-alt pr-1">
+                                        </i>
+                                        Schedule
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm my-1" href="/cms/event/add-banner?need_id=${data[5]}">
+                                         <i class="fas fa-pencil-alt pr-1">
+                                        </i>
+                                        Banner
+                                    </a>
+                            `
+                        } else {
+                            return `
+                                    <a class="btn btn-info btn-sm" href="/cms/needs/${data[6]}/${data[5]}">
+                                        <i class="fas fa-list pr-1">
+                                        </i>
+                                        Assign Need
+                                    </a>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="${data[5]}">
+                                        <i class="fas fa-trash pr-1">
+                                        </i>
+                                        Delete
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm" href="/cms/event/edit/${data[5]}">
+                                        <i class="fas fa-pencil-alt pr-1">
+                                        </i>
+                                        Edit Schedule
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm my-1" href="/cms/event/add-banner?need_id=${data[5]}">
+                                         <i class="fas fa-pencil-alt pr-1">
+                                        </i>
+                                        Banner
+                                    </a>
+                                
+                            `
+                        }
+                    }
+                }
+            ]
+        })
+
+        $('#scheduleTable').on('click', '.delete', function () {
+            var need_id = $(this).data('id');
+            $('#DeleteModal').modal('show');
+            $('.need_id').val(need_id);
+        });
+    });
+</script>

@@ -1,0 +1,111 @@
+<div class="container-fluid">
+    <div style="text-align: right; padding-bottom: 20px;">
+        <a class="btn btn-success" href="/cms/{{section}}">
+            <i class="fas fa-arrow-circle-left"></i> Back
+        </a>
+        <a class="btn btn-success" href="/cms/class/add/{{section}}/{{event_id}}">
+            <i class="fas fa-plus"></i> Add Class
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>List of {{section}} class</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <table id="table_general1" class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                {{#GeneralSectionMode section 'marriage'}}
+                                <th style="width: 20%">BPN Date</th>
+                                {{else}}
+                                <th style="width: 20%">Event Title</th>
+                                {{/GeneralSectionMode}}
+                                <th style="width: 20%">Topic</th>
+                                <th style="width: 20%">Class Time</th>
+                                <th style="width: 20%">Speaker</th>
+                                <th style="width: 20%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each classes}}
+                            <tr>
+                                <td>{{title}}</td>
+                                <td>{{topic}}</td>
+                                <td>{{time}}</td>
+                                <td>{{speaker}}</td>
+                                <td>
+                                    <a href="/cms/class/participant?section={{section}}&class_id={{id}}&event_id={{event_id}}" class="btn btn-sm btn-primary">
+                                       <i class="fas fa-trash pr-1"></i>
+                                        Participant
+                                    </a>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="{{id}}">
+                                       <i class="fas fa-trash pr-1"></i>
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<!-- Modal Delete Produk-->
+<form id="add-row-form" action="/cms/class/delete/{{section}}/{{event_id}}" method="post">
+    <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <strong>Anda yakin mau menghapus data ini?</strong>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="class_id" class="form-control class_id" required>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#table_general1').on('click', '.delete', function () {
+            let class_id = $(this).data('id');
+            $('#DeleteModal').modal('show');
+            $('.class_id').val(class_id);
+        });
+    });
+</script>

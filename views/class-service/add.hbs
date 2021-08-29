@@ -1,0 +1,180 @@
+<div class="container-fluid">
+    <div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="category-title">Topic</label>
+                    <input type="text" class="form-control" id="topic" placeholder="Umum" required>
+                </div>
+            </div>
+            <div class="col">
+                <label>Time</label><br />
+                <input type="datetime-local" id="time">
+            </div>
+            <div class="col my-auto">
+                <button class="btn btn-primary" id="add-btn" disabled><i class="fas fa-check pr-1"></i>
+                    Add</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="category-description">Speaker</label>
+                    <textarea type="text" class="form-control h-50" id="speaker"
+                        placeholder="Write the speaker name"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered table-striped text-center">
+                <thead>
+                    <tr>
+                        <th style="width: 25%">Topic</th>
+                        <th style="width: 25%">Time</th>
+                        <th style="width: 35%">Speaker</th>
+                        <th style="width: 15%">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="table_general1">
+
+                </tbody>
+            </table>
+            <div>
+                <button class="btn btn-primary" id="confirm-btn" disabled><i class="fas fa-check pr-1"></i>Confirm
+                    Save</button>
+                <a class="btn btn-success" href="/cms/{{section}}">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<script>
+    let list = [];
+    let time = [];
+    let topic = [];
+    let speaker = [];
+
+    function update_list(topic) {
+        // clear the existing list
+        $('#table_general1 tr').remove();
+
+        $.each(topic, function (index) {
+            $('#table_general1').append(`
+                <tr>
+                    <td>${topic[index]}</td>
+                    <td>${time[index]}</td>
+                    <td>${speaker[index]}</td>
+                    <td>
+                        <button onclick="remove(${index})" class="btn btn-outline-secondary" type="button"><i class="fas fa-times mr-2"></i>Remove</button>
+                    </td>
+                </tr>
+            `)
+        });
+
+    }
+
+    function remove(index) {
+        //Just to take out the name from list
+        temp = time.splice(index, 1);
+        temp = topic.splice(index, 1);
+        temp = speaker.splice(index, 1);
+        update_list(topic)
+
+        if (topic.length > 0) {
+            $('#confirm-btn').removeAttr("disabled")
+        } else {
+            $("#confirm-btn").prop("disabled", true)
+        }
+    }
+
+    $(document).ready(function () {
+        $("input").on('change', function () {
+            if ($("#topic").val()) {
+                $("#add-btn").removeAttr("disabled")
+            } else {
+                $("#add-btn").prop("disabled", true)
+            }
+
+            if ($("#time").val()) {
+                $("#add-btn").removeAttr("disabled")
+            } else {
+                $("#add-btn").prop("disabled", true)
+            }
+
+            if ($("#speaker").val()) {
+                $("#add-btn").removeAttr("disabled")
+            } else {
+                $("#add-btn").prop("disabled", true)
+            }
+        })
+
+        $("textarea").on('change', function () {
+            if ($("#speaker").val()) {
+                $("#add-btn").removeAttr("disabled")
+            } else {
+                $("#add-btn").prop("disabled", true)
+            }
+            
+            if ($("#topic").val()) {
+                $("#add-btn").removeAttr("disabled")
+            } else {
+                $("#add-btn").prop("disabled", true)
+            }
+
+            if ($("#time").val()) {
+                $("#add-btn").removeAttr("disabled")
+            } else {
+                $("#add-btn").prop("disabled", true)
+            }
+        })
+    })
+
+    $('#add-btn').click(function () {
+        topic.push($('#topic').val())
+        $('#topic').val('')
+        time.push($('#time').val())
+        $('#time').val('')
+        speaker.push($('#speaker').val())
+        $('#speaker').val('')
+        $("#add-btn").prop("disabled", true)
+        update_list(topic);
+
+        if (topic.length > 0) {
+            $('#confirm-btn').removeAttr("disabled")
+        } else {
+            $("#confirm-btn").prop("disabled", true)
+        }
+    })
+
+    $('#confirm-btn').click(function () {
+        for (let i = 0; i < topic.length; i++) {
+            let detail = {
+                topic: topic[i],
+                time: time[i],
+                speaker: speaker[i],
+                section: '{{{section}}}',
+                special_event_id: Number('{{{id}}}')
+            }
+
+            list.push(detail);
+        }
+
+        $.ajax({
+            url: `/cms/class/add/{{{section}}}/{{{id}}}`,
+            method: 'POST',
+            data: {
+                list
+            }
+        })
+            .then(data => {
+                window.location.href = `${data.redirectUrl}`
+            })
+    })
+</script>

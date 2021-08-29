@@ -1,0 +1,212 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>Add Commission Member</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <form action="/cms/commission/add" method="post" class="mb-3">
+                        <div class="d-flex">
+                            <div class="card w-50">
+                                <div class="card-header">
+                                    Member Selected
+                                </div>
+                                <div class="card-body">
+                                    <input id="member" type="text" name="members" hidden>
+                                    <ul id="selected-member">
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="my-auto">
+                                <div class="ml-5 mb-4">
+                                    <div>
+                                        <label for="role" class="form-label mr-2">Role</label>
+                                        {{#ifDepartment session.permission.commission_name 'Pemusik & Multimedia'}}
+                                        <select class="form-select" aria-label="Default select" id="role" name="role">
+                                            {{#each roles}}
+                                            <option value='{{this}}'> {{this}}</option>
+                                            {{/each}}
+                                        </select>
+                                        {{else}}
+                                        {{#ifDepartment session.permission.commission_name 'Design & Creative'}}
+                                        <select class="form-select" aria-label="Default select" id="role" name="role">
+                                            <option value="Admin">Admin</option>
+                                        </select>
+                                        {{else}}
+                                        {{#ifDepartment session.permission.commission_name 'Penjadwalan'}}
+                                         <select class="form-select" aria-label="Default select" id="role" name="role">
+                                            <option value="Pendeta">Pendeta</option>
+                                        </select>
+                                        {{else}}
+                                        <select class="form-select" aria-label="Default select" id="role" name="role">
+                                            <option value="Member Commission">Member Commission</option>
+                                        </select>
+                                        {{/ifDepartment}}
+                                        {{/ifDepartment}}
+                                        {{/ifDepartment}}
+                                    </div>
+                                    <div>
+                                        <label for="role" class="form-label mr-2">Commission</label>
+                                        <select class="form-select" aria-label="Default select" id="commission"
+                                            name="commission">
+                                            {{#ifDepartment session.permission.commission_name 'Design & Creative'}}
+                                            <option value="Creative">Creative</option>
+                                            <option value="Design">Design</option>
+                                            {{else}}
+                                            <option value="{{session.permission.commission_name}}">
+                                                {{session.permission.commission_name}}</option>
+                                            {{/ifDepartment}}
+                                        </select>
+                                    </div>
+                                </div>
+                                <button id="save-btn" class="btn btn-primary ml-5 mb-3"><i
+                                        class="fas fa-check pr-1"></i>Save</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <table id="table-user" class="table table-bordered table-striped w-100 text-center">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%">FullName</th>
+                                <th style="width: 25%">Phone</th>
+                                <th style="width: 30%">Email</th>
+                                <th style="width: 15%">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<script>
+    let role = $("#role").val();
+    let commission = $("#commission").val()
+    let selected = [], listName = [], registered = [];
+    let data, table;
+
+    function update_list(list) {
+        // clear the existing list
+        $('#selected-member li').remove();
+
+        $.each(list, function (index, userName) {
+            $('#selected-member').append('<li class="d-flex" ><p class="mr-3 my-auto">' + listName[index] + `</p><i onclick="remove(${index})" class="fas fa-times my-auto"></i></li>`)
+        });
+
+    }
+
+    function remove(index) {
+        current = selected.splice(index, 1);
+        temp = listName.splice(index, 1)
+        update_list(selected)
+        $('#table-user').DataTable().clear().draw()
+    }
+
+    function getRegisteredMember() {
+        $.ajax({
+            url: `/cms/commission/registered?commission=${commission}&role=${role}`,
+            method: 'GET'
+        })
+            .then((data) => {
+                selected = []
+                listName = []
+                registered = data
+                $('#table-user').DataTable().clear().draw()
+            })
+    }
+
+    $(document).ready(function () {
+        getRegisteredMember();
+
+        $("#role").change(function () {
+            role = $(this).children("option:selected").val();
+            getRegisteredMember();
+            update_list(selected)
+        });
+
+        $("#commission").change(function () {
+            commission = $(this).children("option:selected").val();
+            getRegisteredMember();
+            update_list(selected)
+        });
+
+        table = $('#table-user').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": `/cms/list`,
+                "type": "GET"
+            },
+            "columns": [
+                { "title": 'Fullname', "name": 'full_name' },
+                { "title": 'Phone', "name": 'phone_number' },
+                { "title": 'Email', "name": 'email' },
+                {
+                    "sortable": false,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        let has = '';
+                        for (let i = 0; i < selected.length; i++) {
+                            if (selected[i] == data[3]) {
+                                has = 'disabled'
+                            }
+                        }
+                        for (let j = 0; j < registered.length; j++) {
+                            if (registered[j].user_id == data[3]) {
+                                has = 'disabled'
+                            }
+                        }
+                        if (has) {
+                            return `
+                                <button class="btn btn-outline-secondary ${has}" type="button"><i class="fas fa-plus mr-2"></i>Add</button>
+                            `
+                        } else {
+                            return `
+                                <button class="btn btn-outline-secondary" type="button" id="add-btn"><i class="fas fa-plus mr-2"></i>Add</button>
+                            `
+                        }
+                    }
+                }
+            ]
+        })
+
+        $('#table-user tbody').on('click', '#add-btn', function () {
+            data = table.row($(this).parents('tr')).data();
+            selected.push(data[3]);
+            listName.push(data[0])
+            $('#table-user').DataTable().clear().draw()
+            update_list(selected)
+        });
+
+        $('#save-btn').click(function () {
+            $("#member").val(`${selected}`);
+        })
+    })
+
+
+
+</script>

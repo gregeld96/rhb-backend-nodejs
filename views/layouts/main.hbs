@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      height: 100vh;
+    }
+  </style>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="/AdminLTE/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="/AdminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+  <!-- JQuery Script -->
+  <script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
+  <!-- jQuery UI 1.11.4 -->
+  <script src="/AdminLTE/plugins/jquery-ui/jquery-ui.min.js"></script>
+  <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+  <script>
+    $.widget.bridge('uibutton', $.ui.button)
+  </script>
+  <!-- AdminLTE App -->
+  <script src="/AdminLTE/dist/js/adminlte.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- DataTables -->
+  <script src="/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="/AdminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="/AdminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+  <title>{{ title }} - GSKI Rehobot</title>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+  <!-- Site wrapper -->
+  <div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+      <!-- Left navbar links -->
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="/cms/logout" class="nav-link">Logout</a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ml-auto">
+        <!-- Notifications Dropdown Menu -->
+        <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" aria-haspopup="true" id="notif">
+            <i class="far fa-bell"></i>
+            {{#if session.notif.totalNotif}}
+            <span class="badge bg-danger navbar-badge" id="badge-notif">{{ session.notif.totalNotif }}</span>
+            {{/if}}
+          </a>
+          <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
+            {{#each session.notif.detail_notif}}
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item">
+              <div class="row">
+                <div class="col-1 my-auto"><i class="fas fa-exclamation"></i></div>
+                <div class="col">
+                  <p>{{event_name}}</p>
+                  <span class="text-muted text-sm">{{time}}</span>
+                </div>
+              </div>
+
+            </a>
+            {{/each}}
+          </div>
+        </li>
+      </ul>
+
+    </nav>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <!-- Brand Logo -->
+      <a href="/cms/home" class="brand-link">
+        <img src="/AdminLTE/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+          style="opacity: .8">
+        <span class="brand-text font-weight-light">CMS GSKI Rehobot</span>
+      </a>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Sidebar user (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div class="image">
+            {{#if session.photo}}
+            <img src="/photos/public/profile_pic/{{session.photo}}" class="img-circle elevation-3" alt="User Image">
+            {{else}}
+            <img src="/photos/default/default-profile.jpeg" class="img-circle elevation-3" alt="User Image">
+            {{/if}}
+          </div>
+          <div class="info my-auto">
+            <a href="/cms/profile" class="d-block">{{ session.name }}</a>
+          </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+            <li class="nav-item">
+              <a href="/cms/home" class="nav-link {{ home_active }}">
+                <i class="nav-icon fas fa-home"></i>
+                <p>
+                  Home
+                </p>
+              </a>
+            </li>
+            {{#checkAdminDepartmentAndPermitedDepartment session.permission.commission_name 'Jemaat'
+            session.permission.role_name}}
+            <li class="nav-item">
+              <a href="/cms/pendataan-jemaat/list" class="nav-link {{ register_list_active }}">
+                <i class="nav-icon far fa-id-card"></i>
+                <p>
+                  Register User
+                </p>
+              </a>
+            </li>
+            {{/checkAdminDepartmentAndPermitedDepartment}}
+            {{#checkManagerAndDepartmentForTheAction session.permission.role_name session.permission.commission_name}}
+            <li class="nav-item has-treeview {{ member_data_menu_open }}">
+              <a href="#" class="nav-link {{ member_data_active }}">
+                <i class="nav-icon fas fa-user-friends"></i>
+                <p>
+                  Member
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="pl-3 nav nav-treeview">
+                <li class="nav-item">
+                  <a href="/cms/commission/member-list" class="nav-link {{ member_list_active }}">
+                    <i class="fas fa-list nav-icon"></i>
+                    <p>List</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/cms/commission/add" class="nav-link {{ member_add_active }}">
+                    <i class="nav-icon far fa-user"></i>
+                    <p>
+                      Add
+                    </p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            {{/checkManagerAndDepartmentForTheAction}}
+            {{#checkAdminDepartmentAndPermitedDepartment session.permission.commission_name 'Sunday School'
+            session.permission.role_name}}
+            <li class="nav-item">
+              <a href="/cms/sunday-schools/" class="nav-link {{ sunday_school_active }}">
+                <i class="nav-icon far fa-id-card"></i>
+                <p>
+                  Sunday School
+                </p>
+              </a>
+            </li>
+            {{/checkAdminDepartmentAndPermitedDepartment}}
+            {{#checkAdminDepartmentAndPermitedDepartment session.permission.commission_name 'Pelayanan Jemaat'
+                session.permission.role_name}}
+                {{else}}
+            <li class="nav-item has-treeview {{ list_mass_menu_open }}">
+              <a href="#" class="nav-link {{ list_mass_active }}">
+                <i class="fas fa-list nav-icon"></i>
+                <p>
+                  List
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview ml-4">
+                {{#checkAdminDepartmentAndPermitedDepartment session.permission.commission_name 'Penjadwalan'
+                session.permission.role_name}}
+                <li class="nav-item">
+                  <a href="/cms/penjadwalan/section" class="nav-link {{ mass_section_active }}">
+                    <i class="fas fa-coffee nav-icon"></i>
+                    <p>Section</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/cms/penjadwalan/category" class="nav-link {{ mass_category_active }}">
+                    <i class="far fa-building nav-icon"></i>
+                    <p>Category</p>
+                  </a>
+                </li>
+                {{else}}
+                <li class="nav-item">
+                  <a href="/cms/event" class="nav-link {{ mass_event_active }}">
+                    <i class="far fa-building nav-icon"></i>
+                    <p>Event</p>
+                  </a>
+                </li>
+                {{/checkAdminDepartmentAndPermitedDepartment}}
+              </ul>
+            </li>
+            {{/checkAdminDepartmentAndPermitedDepartment}}
+            {{#checkAdminDepartmentAndPermitedDepartment session.permission.commission_name 'Pelayanan Jemaat'
+            session.permission.role_name}}
+            <li class="nav-item has-treeview {{ serve_menu_open }}">
+              <a href="#" class="nav-link {{ serve_active }}">
+                <i class="fas fa-list nav-icon"></i>
+                <p>
+                  Pelayanan Umat
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview ml-4">
+                <li class="nav-item">
+                  <a href="/cms/baptism/" class="nav-link {{ baptism_list_active }}">
+                    <i class="fas fa-coffee nav-icon"></i>
+                    <p>Baptisan</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/cms/dedication/" class="nav-link {{ dedication_list_active }}">
+                    <i class="far fa-building nav-icon"></i>
+                    <p>Penyerahan Anak</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/cms/marriage" class="nav-link {{ marriage_list_active }}">
+                    <i class="far fa-building nav-icon"></i>
+                    <p>BPN & Pernikahan</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            {{/checkAdminDepartmentAndPermitedDepartment}}
+            {{#checkAdminDepartmentAndPermitedDepartment session.permission.commission_name 'Social Media'
+            session.permission.role_name}}
+            <li class="nav-item has-treeview {{ mobile_content_menu_open }}">
+              <a href="#" class="nav-link {{ mobile_content_active }}">
+                <i class="fas fa-list nav-icon"></i>
+                <p>
+                  Mobile Content
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview ml-4">
+                <li class="nav-item">
+                  <a href="/cms/pasteur-message/" class="nav-link {{ message_list_active }}">
+                    <i class="fas fa-coffee nav-icon"></i>
+                    <p>Pasteur Message</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/cms/news/" class="nav-link {{ news_list_active }}">
+                    <i class="far fa-building nav-icon"></i>
+                    <p>News</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/cms/dynamic-pages/contact-commissions/" class="nav-link {{ concom_list_active }}">
+                    <i class="far fa-building nav-icon"></i>
+                    <p>Contact Commission</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/cms/dynamic-pages/crisis-center/" class="nav-link {{ criscen_list_active }}">
+                    <i class="far fa-building nav-icon"></i>
+                    <p>Crisis Center</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/cms/dynamic-pages/testimonial/" class="nav-link {{ testimonial_list_active }}">
+                    <i class="far fa-building nav-icon"></i>
+                    <p>Testimonial</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/cms/dynamic-pages/giving/" class="nav-link {{ giving_list_active }}">
+                    <i class="far fa-building nav-icon"></i>
+                    <p>Giving</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/cms/dynamic-pages/flash/" class="nav-link {{ flash_list_active }}">
+                    <i class="far fa-building nav-icon"></i>
+                    <p>Flash (Introduction)</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/cms/dynamic-pages/hotline/" class="nav-link {{ hotline_list_active }}">
+                    <i class="far fa-building nav-icon"></i>
+                    <p>Hotline</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/cms/dynamic-pages/home/" class="nav-link {{ home_list_active }}">
+                    <i class="far fa-building nav-icon"></i>
+                    <p>HOME</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/cms/dynamic-pages/help/" class="nav-link {{ help_list_active }}">
+                    <i class="far fa-building nav-icon"></i>
+                    <p>Help</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/cms/dynamic-pages/video/" class="nav-link {{ video_list_active }}">
+                    <i class="far fa-building nav-icon"></i>
+                    <p>Video</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            {{/checkAdminDepartmentAndPermitedDepartment}}
+            {{#checkImportantDepartmentForTheAction session.permission.role_name session.permission.commission_name}}
+            <li class="nav-item">
+              <a href="/cms/needs/request" class="nav-link {{ request_active }}">
+                <i class="nav-icon far fa-id-card"></i>
+                <p>
+                  Request
+                </p>
+              </a>
+            </li>
+            {{/checkImportantDepartmentForTheAction}}
+            {{#checkCreativeDesignDepartment session.permission.commission_name session.permission.role_name}}
+            <li class="nav-item">
+              <a href="/cms/needs/task" class="nav-link {{ task_active }}">
+                <i class="nav-icon far fa-id-card"></i>
+                <p>
+                  Task
+                </p>
+              </a>
+            </li>
+            {{/checkCreativeDesignDepartment}}
+            {{#checkComissionRuanganOnly session.permission.commission_name session.permission.role_name ''}}
+            <li class="nav-item">
+              <a href="/cms/ruangan/calendar" class="nav-link {{ calendar_active }}">
+                <i class="nav-icon fas fa-award"></i>
+                <p>
+                  Calendar
+                </p>
+              </a>
+            </li>
+            {{/checkComissionRuanganOnly}}
+            {{#checkAdminDepartmentAndPermitedDepartment session.permission.commission_name 'IT'
+            session.permission.role_name}}
+            <li class="nav-item has-treeview {{ configuration_menu_open }}">
+              <a href="#" class="nav-link {{ configuration_active }}">
+                <i class="nav-icon fas fa-cog"></i>
+                <p>
+                  Configuration
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="pl-4 nav nav-treeview">
+                <li class="nav-item">
+                  <a href="/cms/cms-admin" class="nav-link {{ cms_admin_active }}">
+                    <i class="fas fa-user-cog nav-icon"></i>
+                    <p>CMS User</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/cms/commission/commission-list" class="nav-link {{ cms_commission_active }}">
+                    <i class="fas fa-user-cog nav-icon"></i>
+                    <p>List Commission</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            {{/checkAdminDepartmentAndPermitedDepartment}}
+            {{#checkAdminDepartmentAndPermitedDepartment session.permission.commission_name 'IT'
+            session.permission.role_name}}
+            <li class="nav-item">
+              <a href="/cms/chat/" class="nav-link {{ chat_active }}">
+                <i class="nav-icon far fa-id-card"></i>
+                <p>
+                  Chat
+                </p>
+              </a>
+            {{/checkAdminDepartmentAndPermitedDepartment}}
+          </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+      </div>
+      <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              {{!-- <h1 class="m-0 text-dark">{{title}}</h1> --}}
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">{{title}}</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+        {{{ body }}}
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer class="main-footer">
+      <strong>Copyright &copy; 2021 GSKI Rehobot</strong> All rights
+      reserved.
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+
+
+
+  <script>
+
+    $('#notif').click(function () {
+      $.ajax({
+        url: `/cms/notif/`,
+        method: 'POST'
+      })
+      $('#badge-notif').remove()
+    })
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+<div class="container-fluid">
+    <div style="text-align: right; padding-bottom: 20px;">
+        <a class="btn btn-success" href="/cms/{{section}}/participant?id={{bpn_id}}">
+            <i class="fas fa-arrow-circle-left"></i> Back
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>{{ legend }}</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <form action="/cms/marriage/participant-blessing/{{need_id}}" method="post" class="mb-3">
+                        <input value='{{bpn_id}}' name="bpn_id" hidden />
+                        <div class="row mb-3">
+                            <div class="col-4">
+                                <label for="example-datetime-local-input" class="col-form-label">Marriage Blessing Date
+                                    Start</label>
+                                <div>
+                                    <input class="form-control" type="datetime-local" id="start_date" min="{{data}}"
+                                        name="marriage_blessing_start" required>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <label for="example-datetime-local-input" class="col-form-label">Marriage Blessing Date
+                                    End</label>
+                                <div>
+                                    <input class="form-control" type="datetime-local" id="end_date" min="{{data}}"
+                                        name="marriage_blessing_end" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <button id="create-btn" type="submit" class="my-auto btn btn-primary mr-3 mb-3">
+                                    <i class="fas fa-check mr-1"></i>
+                                    Appoint
+                                </button>
+                                <a class="btn btn-success" href="/cms/marriage/participant?id={{bpn_id}}">
+                                    <i class="fas fa-times"></i> Cancel
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /.container-fluid -->

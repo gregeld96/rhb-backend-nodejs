@@ -1,0 +1,113 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>{{ legend }}</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    {{#sectionMode section_mode}}
+                    <form action="/cms/penjadwalan/edit-category/{{data.id}}" method="post" class="mb-3"
+                        enctype="multipart/form-data">
+                        {{else}}
+                        <form action="/cms/penjadwalan/edit-section/{{data.id}}" method="post" class="mb-3">
+                            {{/sectionMode}}
+                            <div class="form-group">
+                                <label for="category-title">Title</label>
+                                <input type="text" class="form-control w-25" id="category-title" name="title"
+                                    placeholder="Umum" value="{{data.title}}" required>
+                            </div>
+                            {{#sectionMode section_mode}}
+                            <div class="form-group">
+                                <label for="category-description">Description</label>
+                                <textarea type="text" class="form-control h-50" id="category-description"
+                                    name="description" placeholder="Description here..." required>{{data.description}}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="section-title">Section</label><br />
+                                <select class="form-select" aria-label="Default select" name="section_id">
+                                    {{#selectValueTrue data.section}}
+                                    {{#each list}}
+                                    <option value='{{id}}'> {{title}}</option>
+                                    {{/each}}
+                                    {{/selectValueTrue}}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="thumbnail">Thumbnail</label> <br />
+                                <img src="/photos/public/mass/{{data.thumbnail}}" alt="Thumbnail"
+                                    style="max-width: 300px; max-height: 300px;">
+                                <div class="input-group w-50">
+                                    <div class="custom-file">
+                                        <input type="file" id="thumbnail"
+                                            name="mass_thumbnail" accept="image/png" placeholder="photo">
+                                    </div>
+                                </div>
+                                <p class="text-muted">Gambar tidak boleh lebih dari 300x300 pixels</p>
+                            </div>
+                            {{/sectionMode}}
+                            <div>
+                                <button id="create-btn" type="submit" class="my-auto btn btn-primary mr-3 mb-3"><i
+                                        class="fas fa-check mr-1"></i>Edit</button>
+                                {{#sectionMode section_mode}}
+                                <a class="btn btn-success" href="/cms/penjadwalan/category">
+                                    <i class="fas fa-times"></i> Cancel
+                                </a>
+                                {{else}}
+                                <a class="btn btn-success" href="/cms/penjadwalan/section">
+                                    <i class="fas fa-times"></i> Cancel
+                                </a>
+                                {{/sectionMode}}
+                            </div>
+                </div>
+                </form>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<script>
+    var _URL = window.URL || window.webkitURL;
+    $("#thumbnail").change(function (e) {
+        var file, img;
+        if ((file = this.files[0])) {
+            img = new Image();
+            img.onload = function () {
+                var width = this.width;
+                var height = this.height;
+                $("#width").html(width);
+                $("#height").html(height);
+                if (width <= 300 || height <= 300) {
+                    $("#create-btn").removeAttr("disabled")
+                } else {
+                    $("#create-btn").prop("disabled", true)
+                    alert("Width and heigth must not be more than 300px");
+                }
+            };
+            img.src = _URL.createObjectURL(file);
+        } else {
+            $("#create-btn").removeAttr("disabled")
+        }
+    });
+</script>

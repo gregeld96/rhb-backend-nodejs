@@ -1,0 +1,276 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>Request {{session.permission.commission_name}}</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <table id="table_general1" class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th style="width: 175px">Start Time</th>
+                                <th style="width: 175px">End Time</th>
+                                <th style="width: 150px">Event Name</th>
+                                <th style="width: 100px">Location</th>
+                                <th style="width: 150px">Room</th>
+                                <th style="width: 400px">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<script>
+    $(document).ready(() => {
+        $('#table_general1').DataTable({
+            "scrollX": true,
+            "order": [[0, "desc"]],
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": `/cms/needs`,
+                "type": "GET"
+            },
+            "columns": [
+                { "name": 'time_start', "data": 'time_start' },
+                { "name": 'time_end', "data": 'time_end' },
+                { "name": 'event_name', "data": 'event_name' },
+                { "sortable": false, "data": 'location' },
+                { "sortable": false, "data": 'room' },
+                {
+                    "sortable": false,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        switch (data['commission']) {
+                            case 'Ruangan MAG':
+                            case 'Ruangan Kirana':
+                                if (data['room'] != 'TBA') {
+                                    return `
+                                    <a class="btn btn-info btn-sm" href="/cms/needs/detail/${data['id']}">
+                                         <i class="far fa-file-alt pr-1"></i>
+                                        Detail
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm" href="/cms/needs/edit/${data['id']}">
+                                        <i class="fas fa-list pr-1">
+                                        </i>
+                                        Edit Request
+                                    </a>
+                                `
+                                } else {
+                                    return `
+                                        <a class="btn btn-info btn-sm" href="/cms/needs/detail/${data['id']}">
+                                             <i class="far fa-file-alt pr-1"></i>
+                                            Detail
+                                        </a>
+                                        <a class="btn btn-secondary btn-sm" href="/cms/needs/${data['id']}">
+                                            <i class="fas fa-location-arrow pr-1"></i>
+                                            Assign Room
+                                        </a>
+                                        `
+                                }
+                                break;
+                            case 'Social Media':
+                                if (data['approved']) {
+                                    if (data['approved'].length > 1) {
+                                        return `
+                                        <a class="btn btn-info btn-sm" href="/cms/needs/detail/${data['id']}">
+                                             <i class="far fa-file-alt pr-1"></i>
+                                            Detail
+                                        </a>
+                                        <a class="btn btn-secondary btn-sm" href="/cms/needs/task/upload/Youtube/${data['id']}">
+                                            <i class="fas fa-upload pr-1"></i>
+                                            Youtube
+                                        </a>
+                                        <a class="btn btn-secondary btn-sm" href="/cms/needs/task/upload/Banner/${data['id']}">
+                                            <i class="fas fa-upload pr-1"></i>
+                                            Instagram Banner
+                                        </a>
+                                        <a class="btn btn-info btn-sm" href="${data['approved'][0]}" target="_blank">
+                                            <i class="fas fa-link pr-1"></i>
+                                            Design
+                                        </a >
+                                        <a class="btn btn-info btn-sm" href="${data['approved'][1]}" target="_blank">
+                                            <i class="fas fa-link pr-1"></i>
+                                            Creative
+                                        </a >
+                                        `
+                                    } else {
+                                        return `
+                                        <a class="btn btn-info btn-sm" href="/cms/needs/detail/${data['id']}">
+                                             <i class="far fa-file-alt pr-1"></i>
+                                            Detail
+                                        </a >
+                                        <a class="btn btn-secondary btn-sm" href="/cms/needs/task/upload/Youtube/${data['id']}">
+                                            <i class="fas fa-upload pr-1"></i>
+                                            Youtube
+                                        </a>
+                                        <a class="btn btn-secondary btn-sm" href="/cms/needs/task/upload/Banner/${data['id']}">
+                                            <i class="fas fa-upload pr-1"></i>
+                                            Instagram Banner
+                                        </a>
+                                        <a class="btn btn-info btn-sm" href="${data['approved']} " target="_blank">
+                                            <i class="fas fa-link pr-1"></i>
+                                            Link
+                                        </a >
+                                    `
+                                    }
+                                } else {
+                                    return `
+                                        <a class="btn btn-info btn-sm" href="/cms/needs/detail/${data['id']}" >
+                                             <i class="far fa-file-alt pr-1"></i>
+                                            Detail
+                                        </a >
+                                        <a class="btn btn-secondary btn-sm" href="/cms/needs/task/upload/Youtube/${data['id']}">
+                                            <i class="fas fa-upload pr-1"></i>
+                                            Youtube
+                                        </a>
+                                        <button class="btn btn-info btn-sm" disabled>
+                                            <i class="fas fa-link pr-1"></i>
+                                            Link
+                                        </button>
+                                    `
+                                }
+                                break;
+                            case 'Pemusik & Multimedia':
+                            case 'Security Kirana':
+                            case 'Security MAG':
+                                if (data['approved']) {
+                                    return `
+                                        <a class="btn btn-info btn-sm" href = "/cms/needs/detail/${data['id']}" >
+                                             <i class="far fa-file-alt pr-1"></i>
+                                            Detail
+                                        </a >
+                                        <a class="btn btn-secondary btn-sm" href="/cms/needs/edit-members/${data['id']}">
+                                            <i class="fas fa-pencil-alt pr-1">
+                                        </i>
+                                            Edit Members
+                                        </a>
+                                    `
+                                } else {
+                                    return `
+                                        <a class="btn btn-info btn-sm" href = "/cms/needs/detail/${data['id']}" >
+                                             <i class="far fa-file-alt pr-1"></i>
+                                            Detail
+                                        </a >
+                                        <a class="btn btn-secondary btn-sm" href="/cms/needs/${data['id']}">
+                                            <i class="fas fa-users pr-1"></i>
+                                            Assign Members
+                                        </a>
+                                    `
+                                }
+                            case 'Design & Creative':
+                                if (data['approved']) {
+                                    return `
+                                        <a class="btn btn-info btn-sm" href = "/cms/needs/detail/${data['id']}" >
+                                             <i class="far fa-file-alt pr-1"></i>
+                                            Detail
+                                        </a >
+                                        <a class="btn btn-secondary btn-sm" href="/cms/needs/edit-members/${data['id']}">
+                                            <i class="fas fa-pencil-alt pr-1">
+                                        </i>
+                                            Edit Members
+                                        </a>
+                                        <a class="btn btn-secondary btn-sm" href="/cms/needs/edit/${data['id']}">
+                                            <i class="fas fa-pencil-alt pr-1">
+                                        </i>
+                                            Need
+                                        </a>
+                                    `
+                                } else {
+                                    return `
+                                        <a class="btn btn-info btn-sm" href = "/cms/needs/detail/${data['id']}" >
+                                             <i class="far fa-file-alt pr-1"></i>
+                                            Detail
+                                        </a >
+                                        <a class="btn btn-secondary btn-sm" href="/cms/needs/${data['id']}">
+                                            <i class="fas fa-users pr-1"></i>
+                                            Assign Members
+                                        </a>
+                                        <a class="btn btn-secondary btn-sm" href="/cms/needs/edit/${data['id']}">
+                                            <i class="fas fa-pencil-alt pr-1">
+                                        </i>
+                                            Need
+                                        </a>
+                                    `
+                                }
+                            case 'IT':
+                                return `
+                                    <a class="btn btn-info btn-sm" href = "/cms/needs/detail/${data['id']}" >
+                                         <i class="far fa-file-alt pr-1"></i>
+                                        Detail
+                                    </a >
+                                    <a class="btn btn-secondary btn-sm" href="/cms/needs/edit/${data['id']}">
+                                        <i class="fas fa-pencil-alt pr-1">
+                                    </i>
+                                        Need
+                                    </a>
+                                `
+                            case 'Penjadwalan':
+                                if (data['approved']) {
+                                    return `
+                                        <a class="btn btn-info btn-sm" href = "/cms/needs/detail/${data['id']}" >
+                                             <i class="far fa-file-alt pr-1"></i>
+                                            Detail
+                                        </a >
+                                        <a class="btn btn-secondary btn-sm" href="/cms/needs/edit-members/${data['id']}">
+                                            <i class="fas fa-pencil-alt pr-1">
+                                        </i>
+                                            Edit Pasteur
+                                        </a>
+                                    `
+                                } else {
+                                    return `
+                                        <a class="btn btn-info btn-sm" href = "/cms/needs/detail/${data['id']}" >
+                                             <i class="far fa-file-alt pr-1"></i>
+                                            Detail
+                                        </a >
+                                        <a class="btn btn-secondary btn-sm" href="/cms/needs/edit-members/${data['id']}">
+                                            <i class="fas fa-pencil-alt pr-1">
+                                        </i>
+                                            Edit Pasteur
+                                        </a>
+                                        <a class="btn btn-primary btn-sm" href="/cms/needs/approved/${data['id']}">
+                                            <i class="fas fa-check pr-1"></i>
+                                            Approved
+                                        </a>
+                                    `
+                                }
+                            default:
+                                return `
+                                        <a class="btn btn-info btn-sm" href = "/cms/needs/detail/${data['id']}" >
+                                             <i class="far fa-file-alt pr-1"></i>
+                                            Detail
+                                        </a >
+                                    `
+                        }
+                    }
+                }
+            ]
+        })
+    })
+</script>

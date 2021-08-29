@@ -1,0 +1,221 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>{{ legend }}</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    {{#sectionMode section_mode}}
+                    <form action="/cms/sunday-schools/add-category" method="post" class="mb-3"
+                        enctype="multipart/form-data">
+                        {{else}}
+                        <form action="/cms/sunday-schools/add-schedule" method="post" class="mb-3">
+                            {{/sectionMode}}
+                            {{#sectionMode section_mode}}
+                            <div class="form-group">
+                                <label for="category-title">Name</label>
+                                <input type="text" class="form-control w-25" id="category-title" name="title"
+                                    placeholder="Bermain" required>
+                            </div>
+                            <div class="d-flex">
+                                <div class="form-group">
+                                    <label for="min-age">Min Age</label>
+                                    <input type="number" class="form-control w-50" id="min-age" name="age_min" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="max-age">Max Age</label>
+                                    <input type="number" class="form-control w-50" id="max-age" name="age_max" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="thumbnail">Category Thumbnail</label>
+                                <div class="input-group w-50">
+                                    <div class="custom-file">
+                                        <input type="file" id="thumbnail" name="sunday_school" accept="image/*"
+                                            placeholder="photo" required>
+                                    </div>
+                                </div>
+                            </div>
+                            {{else}}
+                            <div class="form-group">
+                                <label for="quota">Quota</label>
+                                <input type="number" class="form-control w-25" id="quota" name="quota" required>
+                            </div>
+                            <div class="d-flex">
+                                <div class="form-group">
+                                    <label class="my-auto mr-3" for="category-title">Category</label>
+                                    <select class="form-control" id="category-title" name="category_id" required>
+                                        <option selected disabled>Choose the category</option>
+                                        {{#each categories}}
+                                        <option value='{{this.id}}'> {{this.title}}</option>
+                                        {{/each}}
+                                    </select>
+                                </div>
+                                <div class="form-group ml-3">
+                                    <label class="my-auto mr-3" for="member-list">Pelaksana</label>
+                                    <div>
+                                        <input class="form-control" list="member-list" name="member" id="speaker"
+                                            required />
+                                        <datalist id="member-list">
+                                            {{#each members}}
+                                            <option value='{{name}}'></option>
+                                            {{/each}}
+                                        </datalist>
+                                        <p id="no-user" hidden class="ml-2 mb-0">No User Found</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-4">
+                                    <label for="example-datetime-local-input" class="col-form-label">Time Start</label>
+                                    <div>
+                                        <input class="form-control" type="datetime-local" id="time_start"
+                                            name="time_start" required>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <label for="example-datetime-local-input" class="col-form-label">Time End</label>
+                                    <div>
+                                        <input class="form-control" type="datetime-local" id="time_end" name="time_end"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+                            <label>Activity</label>
+                            <div class="d-flex mt-1 w-100">
+                                <input name="activities" id="activities" hidden />
+                                <div class="card w-25">
+                                    <div class="card-header">
+                                        Activities
+                                    </div>
+                                    <div class="card-body">
+                                        <ul id="selected-member">
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="d-flex mb-auto ml-5">
+                                    <input type="text" id="insert_activity" placeholder="Write the activity">
+                                    <button class="btn btn-outline-secondary ml-2" type="button" id="add-btn"><i
+                                            class="fas fa-plus mr-2"></i>Add</button>
+                                </div>
+                            </div>
+                            <div>
+                                {{/sectionMode}}
+                                <div>
+                                    <button id="create-btn" type="submit" class="my-auto btn btn-primary mr-3 mb-3"
+                                        disabled><i class="fas fa-check mr-1"></i>Create</button>
+                                    <a class="btn btn-success" href="/cms/sunday-schools/">
+                                        <i class="fas fa-times"></i> Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<script>
+    let activities = [];
+
+    function update_list(list) {
+        // clear the existing list
+        $('#selected-member li').remove();
+
+        $.each(list, function (index, text) {
+            $('#selected-member').append('<li class="d-flex" ><p class="mr-3 my-auto">' + text + `</p><i onclick="remove(${index})" class="fas fa-times my-auto"></i></li>`)
+        });
+
+    }
+
+    function remove(index) {
+        current = activities.splice(index, 1);
+        update_list(activities)
+        if (activities.length < 1) {
+            $("#create-btn").prop("disabled", true)
+        }
+    }
+
+    $('#add-btn').click(function () {
+        if ($('#insert_activity').val() != "") {
+            activities.push($('#insert_activity').val())
+            $('#insert_activity').val('')
+            update_list(activities)
+        }
+    })
+
+    $('#create-btn').click(function () {
+        $('#activities').val(activities)
+    })
+
+    $(document).ready(function () {
+        $('#speaker').on('input', function () {
+            let input = $(this).val()
+            let optionFound = false;
+            let datalist = this.list
+            var strRegExPattern = input;
+            // Determine whether an option exists with the current value of the input.
+            for (var j = 0; j < datalist.options.length; j++) {
+                if (datalist.options[j].value.match(new RegExp(strRegExPattern, 'gi'))) {
+                    optionFound = true;
+                    break;
+                }
+            }
+
+            for (var j = 0; j < datalist.options.length; j++) {
+                if ($(this).val() == datalist.options[j].value) {
+                    $("#create-btn").removeAttr("disabled")
+                    break;
+                } else {
+                    $("#create-btn").prop("disabled", true)
+                }
+            }
+
+            if (optionFound) {
+                $("#no-user").attr("hidden", "hidden")
+            } else {
+                $("#no-user").removeAttr("hidden")
+            }
+        })
+
+        $('#time_start').change(function () {
+            var timeStart = $('#time_start').val();
+            $("#time_end").attr("min", timeStart);
+        });
+
+        if ('{{{section_mode}}}' != 'section') {
+            $("#create-btn").removeAttr("disabled")
+        }
+    })
+
+    $("input").on('change', function () {
+        if ($('#category-title').val() != "" && $("#time_start").val() != "" && $("#time_end").val() != "") {
+            $("#create-btn").removeAttr("disabled")
+        } else {
+            $("#create-btn").prop("disabled", true)
+        }
+    })
+
+</script>

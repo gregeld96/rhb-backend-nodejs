@@ -1,0 +1,64 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>{{ legend }}</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <form action="/cms/needs/task/upload/{{section}}/{{job_id}}" method="post" class="mb-3"
+                        enctype="multipart/form-data">
+                        {{#GeneralSectionMode section 'Banner'}}
+                        <input type="text" name="title" value="instagram" hidden>
+                        <div class="form-group">
+                            <label for="upload-link">Upload Instagram Banner (max:1)</label> <br>
+                            <input type="file" id="instagram-banner" name="instagram-banner" accept="image/*"
+                                placeholder="instagram-banner" required>
+                        </div>
+                        {{else }}
+                        <div class="form-group">
+                            <label for="upload-link">Upload Link</label>
+                            <input type="text" class="form-control w-25" id="upload-link" name="link"
+                                placeholder="https:// ........" required>
+                        </div>
+                        {{/GeneralSectionMode}}
+                        <div>
+                            <button id="create-btn" type="submit" class="my-auto btn btn-primary mr-3 mb-3"><i
+                                    class="fas fa-check mr-1"></i>Upload</button>
+                            {{#ifDepartment session.permission.commission_name 'Social Media'}}
+                            <a class="btn btn-success" href="/cms/needs/request">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            {{else}}
+                            <a class="btn btn-success" href="/cms/needs/task/">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            {{/ifDepartment}}
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /.container-fluid -->

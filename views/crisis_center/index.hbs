@@ -1,0 +1,126 @@
+<div class="container-fluid">
+    <div style="text-align: right; padding-bottom: 20px;">
+        <a class="btn btn-success" href="/cms/dynamic-pages/crisis-center/add">
+            <i class="fas fa-plus"></i> Add Crisis Center
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>List of Crisis Center</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <table id="table_general" class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">Name</th>
+                                <th style="width: 25%">Phone</th>
+                                <th style="width: 25%">Profile</th>
+                                <th style="width: 25%">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<!-- Modal Delete User-->
+<form id="add-row-form" action="/cms/dynamic-pages/crisis-center/delete/" method="post">
+    <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Delete Data</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <strong>Anda yakin mau menghapus data ini?</strong>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="criscen_id" class="form-control criscen_id" required>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        let table = $('#table_general').DataTable({
+            "searching": false,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": `/cms/dynamic-pages/crisis-center/list`,
+                "type": "GET"
+            },
+            "columns": [
+                { "name": 'name' },
+                { "sortable": false },
+                {
+                    "sortable": false,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return `
+                            <img src="/photos/public/crisis_center/${data[2]}" alt="${data[0]}" width="120" height="120">
+                        `
+                    }
+                },
+                {
+                    "sortable": false,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return `
+                                    <a class="btn btn-secondary btn-sm" href="/cms/dynamic-pages/crisis-center/edit/${data[3]}">
+                                         <i class="fas fa-pencil-alt pr-1">
+                                        </i>
+                                        Edit Contact
+                                    </a>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="${data[3]}">
+                                        <i class="fas fa-trash">
+                                        </i>
+                                        Delete
+                                    </a>
+                            `
+                    }
+                }
+            ]
+        })
+
+        $('#table_general').on('click', '.delete', function () {
+            var criscen_id = $(this).data('id');
+            $('#DeleteModal').modal('show');
+            $('.criscen_id').val(criscen_id);
+        });
+    })
+</script>

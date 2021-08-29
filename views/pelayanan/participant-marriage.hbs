@@ -1,0 +1,258 @@
+<div class="container-fluid">
+    <div style="text-align: right; padding-bottom: 20px;">
+        <a class="btn btn-success" href="/cms/{{section}}/">
+            <i class="fas fa-arrow-circle-left"></i> Back
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend> {{legend }}</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <table id="table_general1" class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">Spouse</th>
+                                <th style="width: 15%">BPN Status</th>
+                                <th style="width: 20%">Marriage Date</th>
+                                <th style="width: 15%">Photo</th>
+                                <th style="width: 25%">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<!-- Modal Status Participant-->
+<form id="add-row-form" action="/cms/{{section}}/status-participant" method="post">
+    <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Decision Approval</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <strong>Anda yakin dengan ini?</strong>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="_method" value="CREATE">
+                    <input type="hidden" name="marriage_id" class="form-control marriage_id" required>
+                    <input type="hidden" name="user_id" class="form-control user_id" required>
+                    <input type="hidden" name="status" class="form-control status" required>
+                    <input type="hidden" name="bpn_id" value="{{data.id}}" required>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal Upload Photo Participant-->
+<form id="upload-row-form" action="/cms/{{section}}/upload-photo/participant" method="post" enctype="multipart/form-data">
+    <div class="modal fade" id="UploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Upload Photo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="full_name" class="orm-control username">
+                    <div class="form-group">
+                            <label for="picture">Marriage Photo</label>
+                            <div class="input-group w-50">
+                                <div class="custom-file">
+                                    <input type="file" id="picture" name="marriage_photo" accept="image/*" placeholder="photo"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="_method" value="CREATE">
+                    <input type="hidden" name="marriage_id" class="form-control marriage_id" required>
+                    <input type="hidden" name="bpn_id" value="{{data.id}}" required>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<script>
+    $(document).ready(function () {
+        let section = '{{{section}}}';
+        let event_id = '{{{data.id}}}'
+
+        table = $('#table_general1').DataTable({
+            "searching": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": `/cms/${section}/list/participant?bpn_id=${event_id}`,
+                "type": "GET"
+            },
+            "columns": [
+                {
+                    "name": 'full_name',
+                    "sortable": true,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return `
+                                <p>${data['man']}\n & \n${data['woman']}</p>
+                                `
+                    }
+                },
+                {
+                    "sortable": false,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        switch (data['status_bpn']) {
+                            case true:
+                                return `<p>Approved</p>`
+                            case false:
+                                return `<p>Rejected</p>`
+                            default:
+                                return `<p>In Review</p>`
+                        }
+                    }
+                },
+                {
+                    "sortable": false,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return `
+                                <p>${data['marriage_date']}</p>
+
+                                `
+                    }
+                },
+                {
+                    "name": 'status',
+                    "sortable": true,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        if(data['photo'] == null){
+                            return `
+                                <p>Tidak ada photo</p>
+                                `
+                        } else {
+                             return `
+                                 <a class="btn btn-info btn-sm my-1" href="/photos/private/marriage/${data['photo']}">
+                                         <i class="far fa-file-alt pr-1"></i>
+                                        Photo Marriage
+                                </a>
+                                `
+                        }
+                    }
+                },
+                {
+                    "sortable": false,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        if(data['status_bpn'] == true){
+                                return `
+                                    <a class="btn btn-secondary btn-sm my-1" href="/cms/${section}/participant/${data["marriage_id"]}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        Detail
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm approval my-1" href="/cms/class/user-class/${data['user_id']}?event_id=${event_id}&section=${section}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        Class
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm my-1" href="/cms/${section}/participant-blessing?id=${data['marriage_id']}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        Blessing Date
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm my-1" href="/cms/needs/add-need/${data["need_id"]}?section=${section}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        Needs
+                                    </a>
+                                    <a class="btn btn-info btn-sm my-1" href="/cms/needs/detail/${data["need_id"]}">
+                                         <i class="far fa-file-alt pr-1"></i>
+                                        Detail
+                                    </a>
+                                    `
+                        } else {
+                                return `
+                                    <a class="btn btn-secondary btn-sm my-1" href="/cms/${section}/participant/${data["marriage_id"]}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        Detail
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm approval my-1" href="javascript:void(0);" data-id="${data["marriage_id"]}" data-status="true" data-user="${data['user_id']}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        Approved
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm approval my-1" href="javascript:void(0);" data-id="${data["marriage_id"]}" data-status="false" data-user="${data['user_id']}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        Disapproved
+                                    </a>
+                                    <a class="btn btn-secondary btn-sm upload my-1" href="javascript:void(0);" data-id="${data["marriage_id"]}" data-username="${data['man']}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        Upload Photo
+                                    </a>
+                                    `
+                        }
+                    }
+                }
+            ]
+        })
+
+        $('#table_general1').on('click', '.approval', function () {
+            let marriage_id = $(this).data('id');
+            let user_id = $(this).data('user')
+            let status = $(this).data('status');
+            console.log(user_id);
+            $('#DeleteModal').modal('show');
+            $('.marriage_id').val(marriage_id);
+            $('.user_id').val(user_id);
+            $('.status').val(status);
+        });
+
+        $('#table_general1').on('click', '.upload', function () {
+            let marriage_id = $(this).data('id');
+            let username = $(this).data('username');
+            $('#UploadModal').modal('show');
+            $('.marriage_id').val(marriage_id);
+            $('.username').val(username);
+        });
+    });
+</script>

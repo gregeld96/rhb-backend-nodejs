@@ -1,0 +1,112 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>Commission Members</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <table id="table_general1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Fullname</th>
+                                <th style="width: 20%">Email</th>
+                                <th>Phone Number</th>
+                                <th>Role</th>
+                                <th>Commission</th>
+                                <th style="width: 20%">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<!-- Modal Delete User-->
+<form id="add-row-form" action="/cms/member/delete/" method="post">
+    <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Delete user</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <strong>Anda yakin mau menghapus data ini?</strong>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="user_role_id" class="form-control user_role_id" required>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        let table = $('#table_general1').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": `/cms/commission/members?data=member`,
+                "type": "GET"
+            },
+            "columns": [
+                { "title": 'Fullname', "name": 'full_name' },
+                { "title": 'Phone', "name": 'phone_number' },
+                { "title": 'Email', "name": 'email' },
+                { "title": 'Role', "sortable": false },
+                { "title": 'Commission', "sortable": false },
+                {
+                    "sortable": false,
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return `
+                            <a class="btn btn-danger btn-sm delete" href="javascript:void(0);" data-id="${data[5]}">
+                                <i class="fas fa-trash pr-1">
+                                </i>
+                                Delete
+                            </a>
+                        `
+                    }
+                }
+            ]
+        })
+
+        $('#table_general1').on('click', '.delete', function () {
+            var user_role_id = $(this).data('id');
+            $('#DeleteModal').modal('show');
+            $('.user_role_id').val(user_role_id);
+        });
+    })
+
+
+</script>

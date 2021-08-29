@@ -1,0 +1,385 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex">
+                    <legend>{{ legend }}</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="card w-50">
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Date Start: {{ request.time_start}}</li>
+                                <li class="list-group-item">Date End: {{request.time_end}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="accordion" id="accordionExample">
+                        {{#if request.ruangan.required}}
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-block text-left" type="button" data-toggle="collapse"
+                                        data-target="#ruangan" aria-expanded="true" aria-controls="ruangan">
+                                        Ruangan
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="ruangan" class="collapse show" aria-labelledby="headingOne"
+                                data-parent="#accordionExample">
+                                <div class="card-body ml-3">
+                                    <div>
+                                        {{#if request.ruangan.location}}
+                                        <div class="d-flex">
+                                            <p class="mr-2 text-bold">Lokasi:</p>
+                                            <p> {{request.ruangan.location}}</p>
+                                        </div>
+                                        {{/if}}
+                                        {{#if request.ruangan.roomName}}
+                                        <div class="d-flex">
+                                            <p class="mr-2 text-bold">Ruangan:</p>
+                                            <p> {{request.ruangan.roomName}}</p>
+                                        </div>
+                                        {{/if}}
+                                        {{#if request.ruangan.totalPax}}
+                                        <div class="d-flex">
+                                            <p class="mr-2 text-bold">Total Pax:</p>
+                                            <p> {{request.ruangan.totalPax}}</p>
+                                        </div>
+                                        {{/if}}
+                                        {{#if request.ruangan.airconStart}}
+                                        <div class="d-flex">
+                                            <p class="mr-2 text-bold">AC Nyala:</p>
+                                            <p> {{request.ruangan.airconStart}}</p>
+                                        </div>
+                                        {{/if}}
+                                        {{#if request.ruangan.openHour}}
+                                        <div class="d-flex">
+                                            <p class="mr-2 text-bold">Buka Ruangan:</p>
+                                            <p> {{request.ruangan.openHour}}</p>
+                                        </div>
+                                        {{/if}}
+                                    </div>
+                                    <div class="d-flex">
+                                        {{#if request.ruangan.consumption}}
+                                        <p class="mr-1 text-bold">Consumption:</p>
+                                        <ul>
+                                            {{#each request.ruangan.consumption}}
+                                            <li>{{this}}</li>
+                                            {{/each}}
+                                        </ul>
+                                        {{/if}}
+                                    </div>
+                                    <div class="d-flex">
+                                        {{#if request.ruangan.unitTable}}
+                                        <p class="mr-4 text-bold">Unit Table:</p>
+                                        <ul>
+                                            {{#each request.ruangan.unitTable}}
+                                            <li>{{this}}</li>
+                                            {{/each}}
+                                        </ul>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/if}}
+                        {{#if request.pembicara}}
+                        <div class="card">
+                            <div class="card-header" id="headingSeven">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-block text-left" type="button" data-toggle="collapse"
+                                        data-target="#pembicara" aria-expanded="true" aria-controls="pembicara">
+                                        Pembicara
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="pembicara" class="collapse show" aria-labelledby="headingSeven"
+                                data-parent="#accordionExample">
+                                <div class="card-body ml-3">
+                                    <div>
+                                        {{#if request.pembicara.pasteur}}
+                                        <div class="d-flex mr-5">
+                                            <p class="mr-2 text-bold">Pasteur:</p>
+                                            <p class="mr-2">{{request.pembicara.pasteur}}</p>
+                                        </div>
+                                        {{/if}}
+                                        {{#if request.pembicara.request}}
+                                        <div class="d-flex mr-5">
+                                            <p class="mr-2 text-bold">Request</p>
+                                            {{#if request.pembicara.approved}}
+                                            <div>
+                                                <p class="mr-2">Approved</p>
+                                            </div>
+                                            {{/if}}
+                                        </div>
+                                        {{/if}}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/if}}
+                        {{#if request.musicMultimedia.required}}
+                        <div class="card">
+                            <div class="card-header" id="headingSix">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-block text-left" type="button" data-toggle="collapse"
+                                        data-target="#musicMultimedia" aria-expanded="true"
+                                        aria-controls="musicMultimedia">
+                                        Music & Multimeda
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="musicMultimedia" class="collapse show" aria-labelledby="headingSix"
+                                data-parent="#accordionExample">
+                                <div class="card-body ml-3">
+                                    <div class="d-flex">
+                                        {{#if request.musicMultimedia.team}}
+                                        <div class="d-flex mr-5">
+                                            <p class="mr-2 text-bold">Team:</p>
+                                            <ul>
+                                                {{#each request.musicMultimedia.team}}
+                                                <li>{{this}}</li>
+                                                {{/each}}
+                                            </ul>
+                                        </div>
+                                        {{/if}}
+                                        {{#if request.musicMultimedia.members}}
+                                        <div class="d-flex mr-5">
+                                            <p class="mr-2 text-bold">Members:</p>
+                                            <ul>
+                                                {{#each request.musicMultimedia.members}}
+                                                <li>{{user_name}} - {{role_name}}</li>
+                                                {{/each}}
+                                            </ul>
+                                        </div>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/if}}
+                        {{#if request.creativeVideo.required}}
+                        <div class="card">
+                            <div class="card-header" id="headingFive">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-block text-left" type="button" data-toggle="collapse"
+                                        data-target="#creativeVideo" aria-expanded="true" aria-controls="creativeVideo">
+                                        Creative Video
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="creativeVideo" class="collapse show" aria-labelledby="headingFive"
+                                data-parent="#accordionExample">
+                                <div class="card-body ml-3">
+                                    {{#if request.creativeVideo.shooting}}
+                                    <div class="d-flex mr-5">
+                                        <p class="mr-2 text-bold">Shooting</p>
+                                    </div>
+                                    {{/if}}
+                                    {{#if request.creativeVideo.editing}}
+                                    <div class="d-flex mr-5">
+                                        <p class="mr-2 text-bold">Editing</p>
+                                    </div>
+                                    {{/if}}
+                                    {{#if request.creativeVideo.link_creative}}
+                                    <div class="d-flex mr-5">
+                                        <p class="mr-2 text-bold">Link creative:</p>
+                                        <a href="{{request.creativeVideo.link_creative}}" target="_blank">Click
+                                            Me</a>
+                                    </div>
+                                    {{/if}}
+                                    {{#if request.creativeVideo.members}}
+                                    <div class="d-flex mr-5">
+                                        <p class="text-bold">Members:</p>
+                                        <ul>
+                                            {{#each request.creativeVideo.members}}
+                                            <li>{{user_name}}</li>
+                                            {{/each}}
+                                        </ul>
+                                    </div>
+                                    {{/if}}
+                                    <div>
+                                        <p class="mr-2 text-bold">Keterangan:</p>
+                                        <p class="mr-2">{{request.creativeVideo.keterangan}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/if}}
+                        {{#if request.designFlyer.required}}
+                        <div class="card">
+                            <div class="card-header" id="headingFour">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-block text-left" type="button" data-toggle="collapse"
+                                        data-target="#designFlyer" aria-expanded="true" aria-controls="designFlyer">
+                                        Design Flyer
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="designFlyer" class="collapse show" aria-labelledby="headingFour"
+                                data-parent="#accordionExample">
+                                <div class="card-body ml-3">
+                                    <div>
+                                        {{#if request.designFlyer.link_design}}
+                                        <div class="d-flex mr-5">
+                                            <p class="mr-2 text-bold">Link design:</p>
+                                            <a href="{{request.designFlyer.link_design}}" target="_blank">Click Me</a>
+                                        </div>
+                                        {{/if}}
+                                        {{#if request.designFlyer.members}}
+                                        <div class="mr-5 d-flex">
+                                            <p class="mr-2 text-bold">Members:</p>
+                                            <ul>
+                                                {{#each request.designFlyer.members}}
+                                                <li>{{user_name}}</li>
+                                                {{/each}}
+                                            </ul>
+                                        </div>
+                                        {{/if}}
+                                        <div class="mr-5">
+                                            <p class="mr-2 text-bold">Keterangan:</p>
+                                            <p class="mr-2">{{request.designFlyer.keterangan}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/if}}
+                        {{#if request.it.required}}
+                        <div class="card">
+                            <div class="card-header" id="headingEight">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-block text-left" type="button" data-toggle="collapse"
+                                        data-target="#it" aria-expanded="true" aria-controls="it">
+                                        IT
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="it" class="collapse show" aria-labelledby="headingEight"
+                                data-parent="#accordionExample">
+                                <div class="card-body ml-3">
+                                    <div class="mr-5">
+                                        {{#if request.it.onlineForm}}
+                                        <div class="mr-5">
+                                            <p class="mr-2 text-bold">Online Form</p>
+                                        </div>
+                                        {{/if}}
+                                        {{#if request.it.whatsAppBlast}}
+                                        <div class="mr-5">
+                                            <p class="mr-2 text-bold">WhatsApp Blast</p>
+                                        </div>
+                                        {{/if}}
+                                        {{#if request.it.smsBlast}}
+                                        <div class="mr-5">
+                                            <p class="mr-2 text-bold">SMS Blast</p>
+                                        </div>
+                                        {{/if}}
+                                    </div>
+                                    <div>
+                                        <p class="mr-2 text-bold">Keterangan:</p>
+                                        <p class="mr-2">{{request.it.keterangan}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/if}}
+                        {{#if request.security.required}}
+                        <div class="card">
+                            <div class="card-header" id="headingThree">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-block text-left" type="button" data-toggle="collapse"
+                                        data-target="#security" aria-expanded="true" aria-controls="security">
+                                        Security
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="security" class="collapse show" aria-labelledby="headingThree"
+                                data-parent="#accordionExample">
+                                <div class="card-body ml-3">
+                                    <div class="d-flex mr-5">
+                                        {{#if request.ruangan.location}}
+                                        <div class="d-flex mr-5">
+                                            <p class="mr-2 text-bold">Lokasi:</p>
+                                            <p> {{request.ruangan.location}}</p>
+                                        </div>
+                                        {{/if}}
+                                        {{#if request.ruangan.roomName}}
+                                        <div class="d-flex mr-5">
+                                            <p class="mr-2 text-bold">Ruangan:</p>
+                                            <p> {{request.ruangan.roomName}}</p>
+                                        </div>
+                                        {{/if}}
+                                        {{#if request.security.members}}
+                                        <div class="d-flex mr-5">
+                                            <p class="mr-2 text-bold">Members:</p>
+                                            <ul>
+                                                {{#each request.security.members}}
+                                                <li>{{user_name}}</li>
+                                                {{/each}}
+                                            </ul>
+                                        </div>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/if}}
+                        {{#if request.socialMedia.required}}
+                        <div class="card">
+                            <div class="card-header" id="headingTwo">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-block text-left" type="button" data-toggle="collapse"
+                                        data-target="#social" aria-expanded="true" aria-controls="social">
+                                        Social Media
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="social" class="collapse show" aria-labelledby="headingTwo"
+                                data-parent="#accordionExample">
+                                <div class="card-body ml-3">
+                                    <div class="d-flex mr-5">
+                                        {{#if request.socialMedia.link_creative}}
+                                        <div class="d-flex mr-5">
+                                            <p class="mr-2 text-bold">Link creative:</p>
+                                            <a href="{{request.socialMedia.link_creative}}" target="_blank">Click Me</a>
+                                        </div>
+                                        {{/if}}
+                                        {{#if request.socialMedia.link_youtube}}
+                                        <div class="d-flex mr-5">
+                                            <p class="mr-2 text-bold">Link youtube:</p>
+                                            <a href="{{request.socialMedia.link_youtube}}" target="_blank">Click Me</a>
+                                        </div>
+                                        {{/if}}
+                                        {{#if request.socialMedia.link_design}}
+                                        <div class="d-flex mr-5">
+                                            <p class="mr-2 text-bold">Link design:</p>
+                                            <a href="{{request.socialMedia.link_design}}" target="_blank">Click Me</a>
+                                        </div>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/if}}
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->

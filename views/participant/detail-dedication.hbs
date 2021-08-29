@@ -1,0 +1,77 @@
+<div class="container-fluid">
+    <div style="text-align: right; padding-bottom: 20px;">
+        <a class="btn btn-success" href="/cms/{{section}}/participant?id={{event_id}}">
+            <i class="fas fa-arrow-circle-left"></i> Back
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <legend>Detail Participant</legend>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {{#if messages.msg_info}}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Success!</h5>
+                        {{messages.msg_info}}
+                    </div>
+                    {{/if}}
+                    {{#if messages.msg_error}}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        {{messages.msg_error}}
+                    </div>
+                    {{/if}}
+                    <div class="card w-50">
+                        <div class="card-header">
+                            <legend>Orang Tua</legend>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><b class="mr-2">Nama:</b> {{data.user.full_name}}</li>
+                                <li class="list-group-item"><b class="mr-2">No. Telphone:</b> {{ data.user.phone_number}}</li>
+                                <li class="list-group-item"><b class="mr-2">Email:</b> {{data.user.email}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    {{#each data.list}}
+                    <div class="card w-50">
+                        <div class="card-header">
+                            <legend>Anak</legend>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><b class="mr-2">Nama:</b> {{full_name}}</li>
+                                <li class="list-group-item"><b class="mr-2">Tempat Lahir:</b> {{ birth_place}}</li>
+                                <li class="list-group-item"><b class="mr-2">Tanggal Lahir:</b> {{birth_of_date}}</li>
+                                <li class="list-group-item"><b class="mr-2">Gender:</b> {{gender}}</li>
+                                <li class="list-group-item"><b class="mr-2">Akte Lahir:</b>
+                                    <a class="btn btn-secondary btn-sm" target="_blank"
+                                        href="/photos/private/akte-anak/{{child_birth_certification_file}}">
+                                        <i class="fas fa-pencil-alt pr-1"></i>
+                                        View
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+<script>
+
+</script>
